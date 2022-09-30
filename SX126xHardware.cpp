@@ -87,7 +87,12 @@ void SX126Handler::Reset(void)
 void SX126Handler::WaitOnBusy(void)
 {
     auto start = std::chrono::steady_clock::now();
+#ifdef RASPI
     while (digitalRead(BUSY) == HIGH)
+#else
+    //TO DO FOR ARM
+
+#endif
     {
         auto end = std::chrono::steady_clock::now();
         auto diff = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
