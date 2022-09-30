@@ -13,7 +13,7 @@ LIB =
 LDFLAGS = 
 
 
-INC_RELEASE = $(INC) -ISX126x
+INC_RELEASE = $(INC) -ISX126x -ISX126x/radio -ISX126x/radio/sx126x -ISX126x/boards -ISX126x/boards/mcu -ISX126x/boards/mcu/espressif -I.
 CFLAGS_RELEASE = $(CFLAGS) -Wall -O0 -g3 -c -fPIC -std=c++11 -DHAVE_PTHREAD -pthread -DZMQ_USE_EPOLL 
 RESINC_RELEASE = $(RESINC)
 RCFLAGS_RELEASE = $(RCFLAGS)
@@ -61,11 +61,13 @@ release: before_release out_release after_release clean_objets
 out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE)
 	$(LD) $(LIBDIR_RELEASE) -o $(OUT_RELEASE) $(OBJ_RELEASE)  $(LDFLAGS_RELEASE) $(LIB_RELEASE)
 
-
 $(OBJDIR_RELEASE)/datahelper.o: datahelper.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c datahelper.cpp -o $(OBJDIR_RELEASE)/datahelper.o
 
-$(OBJDIR_RELEASE)/lorahandler.o: lorahandler.cpp
+$(OBJDIR_RELEASE)/SX126x/boards/timer.o: SX126x/boards/mcu/espressif/timer.cpp SX126x/boards/mcu/timer.h
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c SX126x/boards/mcu/espressif/timer.cpp -o $(OBJDIR_RELEASE)/SX126x/boards/timer.o
+
+$(OBJDIR_RELEASE)/lorahandler.o: lorahandler.cpp SX126x/boards/mcu/timer.h
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c lorahandler.cpp -o $(OBJDIR_RELEASE)/lorahandler.o
 
 $(OBJDIR_RELEASE)/loratimersloop.o: loratimersloop.cpp
@@ -94,9 +96,6 @@ $(OBJDIR_RELEASE)/SX126x/radio/radiohandler.o: SX126x/radio/sx126x/radiohandler.
 
 $(OBJDIR_RELEASE)/SX126x/radio/sx126x.o: SX126x/radio/sx126x/sx126x.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c SX126x/radio/sx126x/sx126x.cpp -o $(OBJDIR_RELEASE)/SX126x/radio/sx126x.o
-
-$(OBJDIR_RELEASE)/SX126x/boards/timer.o: SX126x/boards/mcu/espressif/timer.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c SX126x/boards/mcu/espressif/timer.cpp -o $(OBJDIR_RELEASE)/SX126x/boards/timer.o
 
 clean_release:
 	rm -f $(OBJ_RELEASE) $(OUT_RELEASE)
