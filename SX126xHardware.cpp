@@ -40,12 +40,17 @@ void SX126Handler::DIOInit(void)
 
 void SX126Handler::DIOReInit(void)
 {
+
     spi_config settings = {0, 8, 2000000, 0};
     spiLora->SetConfig(&settings);
     spiLora->Begin();
-
+#ifdef RASPI
     pinMode(DIO1, INPUT);
     pinMode(BUSY, INPUT);
+#else
+    //TODO FOR ARM
+
+#endif
 }
 
 void SX126Handler::IoIrqInit(DioIrqHandler dioIrq)
