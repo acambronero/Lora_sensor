@@ -5,7 +5,9 @@
 #include "mcu/timer.h"
 #include "radiohandler.h"
 //#include "itools.h"
+#ifdef RASPI
 #include "wiringPi.h"
+#endif
 #include <iostream>
 #include <functional>
 
