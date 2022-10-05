@@ -4,6 +4,8 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <string>
+#include <fstream>
 
 #ifdef RASPI
 #include "wiringPi.h"
@@ -31,45 +33,39 @@ void SX126Handler::DIOInit(void)
     pinMode(DIO1, INPUT);
     pinMode(BUSY, INPUT);
     pinMode(RESET, OUTPUT);
-#else
-    //TODO FOR ARM
-
-#endif
     Reset();
-}
-
-void SX126Handler::DIOReInit(void)
-{
-
-    spi_config settings = {0, 8, 2000000, 0};
-    spiLora->SetConfig(&settings);
-    spiLora->Begin();
-#ifdef RASPI
-    pinMode(DIO1, INPUT);
-    pinMode(BUSY, INPUT);
 #else
-    //TODO FOR ARM
-
+    ConfigureGPIO();
 #endif
+
 }
 
-void SX126Handler::IoIrqInit(DioIrqHandler dioIrq)
+void SX126Handler::ConfigureGPIO()
 {
-    //if (== 1)
-        //dioIrq();
+   //configure reset
+   system("echo 973 > /sys/class/gpio/export");
+   system("echo out > /sys/class/gpio/gpio973/direction");
 
-    //wiringPiISR(DIO1, INT_EDGE_RISING, dioIrq);
-    //attachInterrupt(config_hw.PIN_LORA_DIO_1, dioIrq, RISING);
+   //configure Busy
+   system("echo 974 > /sys/class/gpio/export");
+   system("echo in > /sys/class/gpio/gpio974/direction");
 }
 
-void SX126Handler::IoDeInit(void)
+uint8_t SX126Handler::ReadGPIO()
 {
-    /*dio3IsOutput = false;
-    detachInterrupt(config_hw.PIN_LORA_DIO_1);
-    pinMode(config_hw.PIN_LORA_NSS, INPUT);
-    pinMode(config_hw.PIN_LORA_BUSY, INPUT);
-    pinMode(config_hw.PIN_LORA_DIO_1, INPUT);
-    pinMode(config_hw.PIN_LORA_RESET, INPUT);*/
+    std::string data;
+    system("cat /sys/class/gpio/gpio974/value >> output.txt");
+    std::ifstream output("output.txt");
+    getline(output, data);
+
+    return std::stoi(data);
+
+}
+
+void SX126Handler::WriteGPIO(uint8_t value)
+{
+    std::string data = "echo " + std::to_string(value) + " > /sys/class/gpio/gpio973/value";
+    system(data.c_str());
 }
 
 void SX126Handler::Reset(void)
@@ -78,9 +74,8 @@ void SX126Handler::Reset(void)
     digitalWrite(RESET, LOW);
     digitalWrite(RESET, HIGH);
 #else
-    //TO DO FOR ARM
-
-
+    WriteGPIO(0);
+    WriteGPIO(1);
 #endif
 }
 
@@ -90,8 +85,7 @@ void SX126Handler::WaitOnBusy(void)
 #ifdef RASPI
     while (digitalRead(BUSY) == HIGH)
 #else
-    //TO DO FOR ARM
-
+    while (ReadGPIO() == 1)
 #endif
     {
         auto end = std::chrono::steady_clock::now();

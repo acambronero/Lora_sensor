@@ -12,6 +12,9 @@
 #include "linux/types.h"
 #include "errno.h"
 
+
+#define DELAY_TX   50
+
 class SPILora : public SPIBase
 {
 public:

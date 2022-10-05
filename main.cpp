@@ -1,10 +1,13 @@
 #include "monitoringhandler.h"
 #include "unistd.h"
 #include "timershandler.h"
+#include <thread>
+#include <chrono>
 
 int a = 1;
 
 #define BUFFER_SIZE 127 // Define the payload size here
+
 
 
 int main(){
@@ -13,21 +16,25 @@ int main(){
     uint8_t TxdBuffer[BUFFER_SIZE];
     TxdBuffer[0] = 0x50;//P
     TxdBuffer[1] = 0x4F;//O
-    //TxdBuffer[1] = 0x49;//I
     TxdBuffer[2] = 0x4E;//N
     TxdBuffer[3] = 0x47;//G
-    //int i = 0;
+    TxdBuffer[4] = 0x50;//P
+    TxdBuffer[5] = 0x4F;//O
+    TxdBuffer[6] = 0x4E;//N
+    TxdBuffer[7] = 0x47;//G
+    TxdBuffer[8] = 0x50;//P
+    TxdBuffer[9] = 0x4F;//O
+    TxdBuffer[10] = 0x4E;//N
+    TxdBuffer[11] = 0x47;//G
+    TxdBuffer[12] = 0x50;//P
+    TxdBuffer[13] = 0x4F;//O
+    TxdBuffer[14] = 0x4E;//N
+    TxdBuffer[15] = 0x47;//G
 
     std::array<uint8_t, 255> data = {0};
     uint16_t size = 0;
 
     while (a){
-        //monitoring.Send(TxdBuffer, 4);
-        //if (!monitoring.lora->radioHandler->TimerTxFired){
-            /*if (monitoring.firstTime){
-                monitoring.firstTime = false;
-                monitoring.lora->radioHandler->TimerTxTimeout = false;
-            }*/
             monitoring.Run();
             if (monitoring.dataReady) {
                 data = monitoring.lora->radioHandler->GetPayloadData(size);
@@ -38,24 +45,22 @@ int main(){
                 std::cout << data[3] << std::endl;
                 monitoring.dataReady = 0;
                 monitoring.sendReady = 1;
-
-                /*for (int i = 4; i < BUFFER_SIZE; i++){
-                    TxdBuffer[i] = i - 4;
-                }*/
-                //monitoring.Send(TxdBuffer, 4);
             }
             if (monitoring.sendReady){
-                /*for (int i = 0; i < 10; i++){
-                    monitoring.Send(TxdBuffer, 4);
-                    usleep(5000);
-                }*/
-                monitoring.Send(TxdBuffer, 4);
+                std::cout << "Data Send: " <<  rand() << std::endl;
+                monitoring.Send(TxdBuffer, 16, 0, 0);
                 monitoring.sendReady = 0;
             }
-                usleep(10000);
-        //}
+            std::this_thread::sleep_for(std::chrono::milliseconds(242));
     }
 }
+
+//monitoring.Send(TxdBuffer, 4);
+//if (!monitoring.lora->radioHandler->TimerTxFired){
+    /*if (monitoring.firstTime){
+        monitoring.firstTime = false;
+        monitoring.lora->radioHandler->TimerTxTimeout = false;
+    }*/
 
 
 

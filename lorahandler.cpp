@@ -38,24 +38,19 @@ void lorahandler::Init()
     radioHandler->Init(sxHandler);
 }
 
-void lorahandler::ReInit()
-{
-    radioHandler->ReInit(sxHandler);
-}
-
 void lorahandler::SetChannel(uint32_t freq)
 {
     radioHandler->SetChannel(freq, sxHandler);
 }
 
-void lorahandler::SetTxConfig(int8_t power, uint32_t fdev, uint32_t bandwidth, uint32_t datarate, uint8_t coderate, uint16_t preambleLen, bool fixLen, bool crcOn, bool freqHopOn, uint8_t hopPeriod, bool iqInverted, uint32_t timeout)
+void lorahandler::SetTxConfig(int8_t power, uint32_t bandwidth, uint32_t datarate, uint8_t coderate, uint16_t preambleLen, bool fixLen, bool crcOn, bool iqInverted, uint32_t TxTimeout)
 {
-    radioHandler->SetTxConfig(power, fdev, bandwidth, datarate, coderate, preambleLen, fixLen, crcOn, freqHopOn, hopPeriod, iqInverted, timeout, sxHandler);
+    radioHandler->SetTxConfig(power, bandwidth, datarate, coderate, preambleLen, fixLen, crcOn, iqInverted, TxTimeout, sxHandler);
 }
 
-void lorahandler::SetRxConfig(uint32_t bandwidth, uint32_t datarate, uint8_t coderate, uint32_t bandwidthAfc, uint16_t preambleLen, uint16_t symbTimeout, bool fixLen, uint8_t payloadLen, bool crcOn, bool freqHopOn, uint8_t hopPeriod, bool iqInverted, bool rxContinuous)
+void lorahandler::SetRxConfig(uint32_t bandwidth, uint32_t datarate, uint8_t coderate, uint16_t preambleLen, uint16_t symbTimeout, bool fixLen, uint8_t payloadLen, bool crcOn, bool iqInverted, bool rxContinuous, uint32_t RxTimeout)
 {
-    radioHandler->SetRxConfig(bandwidth, datarate, coderate, bandwidthAfc, preambleLen, symbTimeout, fixLen, payloadLen, crcOn, freqHopOn, hopPeriod, iqInverted, rxContinuous, sxHandler);
+    radioHandler->SetRxConfig(bandwidth, datarate, coderate, preambleLen, symbTimeout, fixLen, payloadLen, crcOn, iqInverted, rxContinuous, RxTimeout, sxHandler);
  }
 
 void lorahandler::SetRx(uint32_t timeout)
@@ -68,12 +63,11 @@ void lorahandler::SetRxBoosted(uint32_t timeout)
     radioHandler->RxBoosted(timeout, sxHandler);
 }
 
-void lorahandler::Send(uint8_t *buffer, uint8_t size)
+void lorahandler::Send(uint8_t *buffer, uint8_t size, uint32_t TxTimeout, uint32_t RxTimeout)
 {
     //std::cout << "lorahandler::Send" << std::endl;
 
-
-    radioHandler->Send(buffer, size, sxHandler);
+    radioHandler->Send(buffer, size, TxTimeout, RxTimeout, sxHandler);
 }
 
 void lorahandler::IrqProcess(uint8_t *dataReady)
@@ -81,17 +75,8 @@ void lorahandler::IrqProcess(uint8_t *dataReady)
     radioHandler->BgIrqProcess(dataReady, sxHandler);
 }
 
-/*void lorahandler::GetPayloadData(uint8_t& payload, uint16_t size)
-{
-    std::cout << "lorahandler::GetPayloadData" << std::endl;
-    radioHandler->GetPayloadData(&payload, size);
-    //std::cout << payload[0] << std::endl;
-}*/
-
 uint32_t lorahandler::HardwareInit()
 {
-    TimerConfig();
-
     sxHandler->DIOInit();
 
     // After power on the sync word should be 2414. 4434 could be possible on a restart
@@ -99,7 +84,6 @@ uint32_t lorahandler::HardwareInit()
     uint16_t readSyncWord = 0;
     sxHandler->ReadRegisters(REG_LR_SYNCWORD, (uint8_t *)&readSyncWord, 2);
 
-    LOG_LIB("BRD", "SyncWord = %04X", readSyncWord);
     std::cout << "lora_hardware_init -> readSyncWord: " << readSyncWord << std::endl;
 
     if ((readSyncWord == 0x2414) || (readSyncWord == 0x4434))
@@ -108,28 +92,6 @@ uint32_t lorahandler::HardwareInit()
     }
     return 1;
 }
-
-uint32_t lorahandler::HardwareReInit()
-{
-    TimerConfig();
-
-    sxHandler->DIOReInit();
-
-    // After power on the sync word should be 2414. 4434 could be possible on a restart
-    // If we got something else, something is wrong.
-    uint16_t readSyncWord = 0;
-    sxHandler->ReadRegisters(REG_LR_SYNCWORD, (uint8_t *)&readSyncWord, 2);
-
-    LOG_LIB("BRD", "SyncWord = %04X", readSyncWord);
-
-    if ((readSyncWord == 0x2414) || (readSyncWord == 0x4434))
-    {
-        return 0;
-    }
-    return 1;
-}
-
-
 
 RadioStatus_t lorahandler::Get_Status()
 {

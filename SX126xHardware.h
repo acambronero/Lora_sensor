@@ -24,17 +24,11 @@ public:
  */
     void DIOInit(void);
 
-/*!
- * @brief Initializes the radio I/Os pins interface after deep sleep wake
- */
-    void DIOReInit(void);
+    void ConfigureGPIO();
 
-/*!
- * @brief Initializes DIO IRQ handlers
- *
- * \param  dioIrq Array containing the IRQ callback functions
- */
-    void IoIrqInit(DioIrqHandler dioIrq);
+    uint8_t ReadGPIO();
+
+    void WriteGPIO(uint8_t value);
 
 /*!
  * @brief De-initializes the radio I/Os pins interface.

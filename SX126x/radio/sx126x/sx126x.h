@@ -650,16 +650,6 @@ typedef struct SX126x_s
 } SX126x_t;
 
 /*!
- * Hardware IO IRQ callback function definition
- */
-typedef void(DioIrqHandler)(void);
-//typedef std::function<void()> DioIrqHandler;
-
-/*!
- * SX126x definitions
- */
-
-/*!
  * \brief Provides the frequency of the chip running on the radio and the frequency step
  *
  * \remark These defines are used for computing the frequency divider to set the RF frequency
@@ -669,23 +659,6 @@ typedef void(DioIrqHandler)(void);
 #define FREQ_STEP (double)(XTAL_FREQ / FREQ_DIV)
 
 #define RX_BUFFER_SIZE 256
-
-/*!
- * \brief The radio callbacks structure
- * Holds function pointers to be called on radio interrupts
- */
-typedef struct
-{
-	void (*txDone)(void);					 //!< Pointer to a function run on successful transmission
-	void (*rxDone)(void);					 //!< Pointer to a function run on successful reception
-	void (*rxPreambleDetect)(void);			 //!< Pointer to a function run on successful Preamble detection
-	void (*rxSyncWordDone)(void);			 //!< Pointer to a function run on successful SyncWord reception
-	void (*rxHeaderDone)(bool isOk);		 //!< Pointer to a function run on successful Header reception
-	void (*txTimeout)(void);				 //!< Pointer to a function run on transmission timeout
-	void (*rxTimeout)(void);				 //!< Pointer to a function run on reception timeout
-	void (*rxError)(IrqErrorCode_t errCode); //!< Pointer to a function run on reception error
-	void (*cadDone)(bool cadFlag);			 //!< Pointer to a function run on channel activity detected
-} SX126xCallbacks_t;
 
 /*!
  * ============================================================================
@@ -699,12 +672,7 @@ public:
     /*!
      * \brief Initializes the radio driver
      */
-    void Init(DioIrqHandler dioIrq, SX126Handler *sxHandler);
-
-    /*!
-     * \brief Re-Initializes the radio driver after CPU wakeup from deep sleep
-     */
-    void ReInit(DioIrqHandler dioIrq, SX126Handler *sxHandler);
+    void Init(SX126Handler *sxHandler);
 
     /*!
      * \brief Gets the current Operation Mode of the Radio

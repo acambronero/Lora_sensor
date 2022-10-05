@@ -1,8 +1,6 @@
 #ifndef __RADIOHANDLER_H__
 #define __RADIOHANDLER_H__
 
-
-
 #include "stdint.h"
 #include "mcu/timer.h"
 #include "SX126xHardware.h"
@@ -66,18 +64,16 @@ class RadioHandler
 public:
     RadioHandler();
     void Init(SX126Handler *sxHandler);
-    void ReInit(SX126Handler *sxHandler);
     void SetIrqsEnable(std::vector<IrqsActivated> irq);
     RadioState_t GetStatus(SX126Handler *sxHandler);
     void SetModem(RadioModems_t modem, SX126Handler *sxHandler);
     void SetChannel(uint32_t freq, SX126Handler *sxHandler);
     bool IsChannelFree(uint32_t freq, int16_t rssiThresh, uint32_t maxCarrierSenseTime, SX126Handler *sxHandler);
     uint32_t Random(SX126Handler *sxHandler);
-    void SetRxConfig(uint32_t bandwidth, uint32_t datarate, uint8_t coderate, uint32_t bandwidthAfc, uint16_t preambleLen, uint16_t symbTimeout, bool fixLen, uint8_t payloadLen, bool crcOn, bool freqHopOn, uint8_t hopPeriod, bool iqInverted, bool rxContinuous, SX126Handler *sxHandler);
-    void SetTxConfig(int8_t power, uint32_t fdev, uint32_t bandwidth, uint32_t datarate, uint8_t coderate, uint16_t preambleLen, bool fixLen, bool crcOn, bool freqHopOn, uint8_t hopPeriod, bool iqInverted, uint32_t timeout, SX126Handler *sxHandler);
-    bool CheckRfFrequency(uint32_t frequency);
+    void SetRxConfig(uint32_t bandwidth, uint32_t datarate, uint8_t coderate, uint16_t preambleLen, uint16_t symbTimeout, bool fixLen, uint8_t payloadLen, bool crcOn, bool iqInverted, bool rxContinuous, uint32_t RxTimeout, SX126Handler *sxHandler);
+    void SetTxConfig(int8_t power, uint32_t bandwidth, uint32_t datarate, uint8_t coderate, uint16_t preambleLen, bool fixLen, bool crcOn, bool iqInverted, uint32_t timeout, SX126Handler *sxHandler);
     uint32_t TimeOnAir(uint8_t pktLen);
-    void Send(uint8_t *buffer, uint8_t size, SX126Handler *sxHandler);
+    void Send(uint8_t *buffer, uint8_t size, uint32_t TxTimeout, uint32_t RxTimeout, SX126Handler *sxHandler);
     void Sleep(SX126Handler *sxHandler);
     void Standby(SX126Handler *sxHandler);
     void Rx(uint32_t timeout, SX126Handler *sxHandler);
@@ -103,10 +99,6 @@ public:
      */
     void OnTxDone(void);
     /*!
-     * \brief  Tx Timeout callback prototype.
-     */
-    void OnTxTimeout(void);
-    /*!
      * \brief Rx Done callback prototype.
      *
      * \param  payload Received buffer pointer
@@ -117,6 +109,10 @@ public:
      *                     LoRa: SNR value in dB
      */
     void OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
+    /*!
+     * \brief  Tx Timeout callback prototype.
+     */
+    void OnTxTimeout(void);
     /*!
      * \brief  Rx Timeout callback prototype.
      */
@@ -171,7 +167,7 @@ protected:
     PacketStatus_t RadioPktStatus;
 
     uint32_t TxTimeout = 15000;
-    uint32_t RxTimeout = 0;
+    uint32_t RxTimeout = 5000;
     static bool IrqFired;
 
 
@@ -182,6 +178,7 @@ protected:
     uint8_t TxdBuffer[BUFFER_SIZE];
     SX126x_t SX126x;
     SX126xDriver *sxDriver;
+    uint8_t triesToSend = 0;
 
     uint8_t message_type = 0;
     uint8_t command = 0;

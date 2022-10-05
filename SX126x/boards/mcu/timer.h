@@ -68,14 +68,6 @@ typedef struct TimerEvent_s
 typedef uint32_t TimerTime_t;
 #endif
 
-/**@brief Initializes the RTC2 timer
- *
- * @details Set prescaler to 31 in order to have Fs=1kHz
- *			Enable CC interrupt
- *			Start RTC2
- */
-void TimerConfig(void);
-
 /**@brief Initializes the timer object
  *
  * @remark TimerSetValue function must be called before starting the timer.
@@ -84,7 +76,6 @@ void TimerConfig(void);
  * @param  obj          Structure containing the timer object parameters
  * @param  callback     Function callback called at the end of the timeout
  */
-//void TimerInit(TimerEvent_t *obj, void (*callback)(void));
 void TimerInit(TimerEvent_t *obj, std::function<void(void)> callback);
 
 

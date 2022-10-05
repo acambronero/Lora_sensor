@@ -22,25 +22,20 @@ public:
     void SetSpiLora(SPIBase* lora);
     void SetIrqsEnable(std::vector<IrqsActivated> irq);
     uint32_t HardwareInit();
-    uint32_t HardwareReInit();
     void Init();
-    void ReInit();
     void SetChannel(uint32_t freq);
-    void SetTxConfig(int8_t power, uint32_t fdev,
-                     uint32_t bandwidth, uint32_t datarate,
+    void SetTxConfig(int8_t power, uint32_t bandwidth, uint32_t datarate,
                      uint8_t coderate, uint16_t preambleLen,
-                     bool fixLen, bool crcOn, bool freqHopOn,
-                     uint8_t hopPeriod, bool iqInverted, uint32_t timeout);
-    void SetRxConfig(uint32_t bandwidth,
-                     uint32_t datarate, uint8_t coderate,
-                     uint32_t bandwidthAfc, uint16_t preambleLen,
-                     uint16_t symbTimeout, bool fixLen,
-                     uint8_t payloadLen,
-                     bool crcOn, bool freqHopOn, uint8_t hopPeriod,
-                     bool iqInverted, bool rxContinuous);
+                     bool fixLen, bool crcOn, bool iqInverted, uint32_t TxTimeout);
+
+    void SetRxConfig(uint32_t bandwidth, uint32_t datarate, uint8_t coderate,
+                     uint16_t preambleLen, uint16_t symbTimeout, bool fixLen,
+                     uint8_t payloadLen, bool crcOn, bool iqInverted,
+                     bool rxContinuous, uint32_t RxTimeout);
+
     void SetRx(uint32_t timeout);
     void SetRxBoosted(uint32_t timeout);
-    void Send(uint8_t *buffer, uint8_t size);
+    void Send(uint8_t *buffer, uint8_t size, uint32_t TxTimeout, uint32_t RxTimeout);
     void IrqProcess(uint8_t *dataReady);
     void GetPayloadData(uint8_t& payload, uint16_t size);
 

@@ -29,9 +29,9 @@ void MonitoringHandler::lora_setup()
         printf("Something is wrong !!\n");
     }
 
-    //irqs.push_back(IRQ_ENABLE_PREAMBLE_DETECTED);
     irqs.push_back(IRQ_ENABLE_RX_DONE);
     irqs.push_back(IRQ_ENABLE_TX_DONE);
+    irqs.push_back(IRQ_ENABLE_RX_TX_TIMEOUT);
 
     lora->SetIrqsEnable(irqs);
 
@@ -40,38 +40,67 @@ void MonitoringHandler::lora_setup()
 
     lora->SetChannel(RF_FREQUENCY);
 
-    lora->SetTxConfig(TX_OUTPUT_POWER, 0, LORA_BANDWIDTH,
+    lora->SetTxConfig(TX_OUTPUT_POWER, LORA_BANDWIDTH,
                       LORA_SPREADING_FACTOR, LORA_CODINGRATE,
                       LORA_PREAMBLE_LENGTH, LORA_FIX_LENGTH_PAYLOAD_ON,
-                      true, 0, 0, LORA_IQ_INVERSION_ON, TX_TIMEOUT_VALUE);
+                      true, LORA_IQ_INVERSION_ON, TX_TIMEOUT_VALUE);
 
     lora->SetRxConfig(LORA_BANDWIDTH, LORA_SPREADING_FACTOR,
-                      LORA_CODINGRATE, 0, LORA_PREAMBLE_LENGTH,
+                      LORA_CODINGRATE, LORA_PREAMBLE_LENGTH,
                       LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
-                      0, true, 0, 0, LORA_IQ_INVERSION_ON, true);
+                      0, true, LORA_IQ_INVERSION_ON, false, RX_TIMEOUT_VALUE);
 
-    lora->SetRx(0);
+    sendReady = 1;
 }
 
-void MonitoringHandler::Send(uint8_t *tx_buffer, uint16_t len)
+void MonitoringHandler::Send(uint8_t *tx_buffer, uint16_t len, uint32_t TxTimeout, uint32_t RxTimeout)
 {
     //std::cout << "MonitoringHandler::Send" << std::endl;
 
-    //lora->radioHandler->Sleep(lora->sxHandler);
-    //lora->radioHandler->sxHandler->Wakeup();
-    //lora->radioHandler->sxHandler->Reset();
+    lora->Send(tx_buffer, len, TxTimeout, RxTimeout);
+}
 
+void MonitoringHandler::decode_message()
+{
+    int index = 0;
+    std::string SFD;
+    SFD.push_back((char)empty_buffer(RcvBuffer, 1, index));
+    SFD.push_back((char)empty_buffer(RcvBuffer, 1, index));
 
-    /*lora->SetTxConfig(TX_OUTPUT_POWER, 0, LORA_BANDWIDTH,
-                      LORA_SPREADING_FACTOR, LORA_CODINGRATE,
-                      LORA_PREAMBLE_LENGTH, LORA_FIX_LENGTH_PAYLOAD_ON,
-                      true, 0, 0, LORA_IQ_INVERSION_ON, TX_TIMEOUT_VALUE);*/
+    if (SFD != "FS") return;
 
-    lora->Send(tx_buffer, len);
+    /*message_type = (uint8_t)empty_buffer(RcvBuffer, 1, index);
+    command = (uint8_t)empty_buffer(RcvBuffer, 1, index);
+    deviceTag = (uint32_t) empty_buffer(RcvBuffer, 4, index);
+    version = (uint8_t)empty_buffer(RcvBuffer, 1, index);
+    timestamp = empty_buffer(RcvBuffer, 8, index);
+    deviceId = (uint8_t)empty_buffer(RcvBuffer, 1, index);*/
 
-
-
-    //SetRx();
+    switch (command)
+    {
+        case COMMAND_ACQUISITION_DATA:
+        {
+            //DataHelperResponse msg;
+            //prepare_acquisition_data(msg);
+            //set_buffer_data(TxdBuffer, &msg);
+            break;
+        }
+        case COMMAND_WRITE_CONFIGURATION:
+        {
+            DataHelperRequest msg = {
+                (uint8_t)MESSAGE_TYPE_REQUEST,
+                (uint8_t)COMMAND_ACQUISITION_DATA,
+                0x260B269E,
+                0x1,
+                0x260B269EDE32ABCE,
+                0x1,
+            };
+            set_buffer_data(TxdBuffer, &msg);
+            break;
+        }
+        default:
+            break;
+    }
 
 }
 
@@ -80,14 +109,6 @@ void MonitoringHandler::Run()
     lora->IrqProcess(&dataReady);
 }
 
-/*void MonitoringHandler::GetPayloadData(uint8_t *payload, uint16_t size)
-{
-    std::cout << "MonitoringHandler::GetPayloadData" << std::endl;
-    //lora->GetPayloadData(payload, size);
-    lora->radioHandler->GetPayloadData(payload, size);
-    std::cout << payload[0] << std::endl;
-}*/
-
-void MonitoringHandler::SetRx(){
-    lora->SetRx(0);
+void MonitoringHandler::SetRx(uint32_t timeout){
+    lora->SetRx(timeout);
 }

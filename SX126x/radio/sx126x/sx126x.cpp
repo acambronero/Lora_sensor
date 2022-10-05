@@ -58,21 +58,14 @@ void SX126xSetInterruptMode(void);
  */
 void SX126xProcessIrqs(void);
 
-void SX126xDriver::Init(DioIrqHandler dioIrq, SX126Handler *sxHandler)
+void SX126xDriver::Init(SX126Handler *sxHandler)
 {
     sxHandler->Reset();
-
-    sxHandler->IoIrqInit(dioIrq);
 
     sxHandler->Wakeup();
     SetStandby(STDBY_RC, sxHandler);
 
     SetOperatingMode(MODE_STDBY_RC);
-}
-
-void SX126xDriver::ReInit(DioIrqHandler dioIrqs, SX126Handler *sxHandler)
-{
-    sxHandler->IoIrqInit(dioIrqs);
 }
 
 RadioOperatingModes_t SX126xDriver::GetOperatingMode(void)

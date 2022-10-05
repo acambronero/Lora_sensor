@@ -8,13 +8,6 @@ TimersHandler timerTickers;
 uint32_t timerTimes[10];
 bool timerInUse[10] = {false, false, false, false, false, false, false, false, false, false};
 
-// External functions
-
-void TimerConfig(void)
-{
-	/// \todo Nothing to do here for ESP32
-}
-
 //void TimerInit(TimerEvent_t *obj, void (*callback)(void))
 void TimerInit(TimerEvent_t *obj, std::function<void(void)> callback)
 {
@@ -33,22 +26,10 @@ void TimerInit(TimerEvent_t *obj, std::function<void(void)> callback)
 	/// \todo We run out of tickers, what do we do now???
 }
 
-void timerCallback(TimerEvent_t *obj)
-{
-	// Nothing to do here for the ESP32
-}
-
 void TimerStart(TimerEvent_t *obj)
 {
-	int idx = obj->timerNum;
-	if (obj->oneShot)
-	{
-        timerTickers.StartShot(idx, timerTimes[idx], &(obj->Callback));
-	}
-	else
-	{
-        timerTickers.Start(idx, timerTimes[idx], &(obj->Callback));
-	}
+    int idx = obj->timerNum;
+    timerTickers.Start(idx, timerTimes[idx], &(obj->Callback));
 }
 
 void TimerStop(TimerEvent_t *obj)
@@ -64,14 +45,7 @@ void TimerReset(TimerEvent_t *obj)
 	int idx = obj->timerNum;
     //timerTickers[idx].detach();
     timerTickers.Stop(idx);
-	if (obj->oneShot)
-	{
-        timerTickers.StartShot(idx, timerTimes[idx], &(obj->Callback));
-	}
-	else
-	{
-        timerTickers.Start(idx, timerTimes[idx], &(obj->Callback));
-	}
+    timerTickers.Start(idx, timerTimes[idx], &(obj->Callback));
 }
 
 void TimerSetValue(TimerEvent_t *obj, uint32_t value)
