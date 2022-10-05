@@ -44,11 +44,11 @@ void SX126Handler::ConfigureGPIO()
 {
    //configure reset
    system("echo 973 > /sys/class/gpio/export");
-   system("echo out > /sys/class/gpio/gpio973/direction");
+   system("echo in > /sys/class/gpio/gpio973/direction");
 
    //configure Busy
    system("echo 974 > /sys/class/gpio/export");
-   system("echo in > /sys/class/gpio/gpio974/direction");
+   system("echo out > /sys/class/gpio/gpio974/direction");
 }
 
 uint8_t SX126Handler::ReadGPIO()
