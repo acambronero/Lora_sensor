@@ -3,12 +3,11 @@
 #include "timershandler.h"
 #include <thread>
 #include <chrono>
+#include "datahelper.h"
 
 int a = 1;
 
 #define BUFFER_SIZE 127 // Define the payload size here
-
-
 
 int main(){
     MonitoringHandler monitoring;
@@ -51,16 +50,9 @@ int main(){
                 monitoring.Send(TxdBuffer, 16, 0, 0);
                 monitoring.sendReady = 0;
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(242));
+            sleep_milliseconds(150);
     }
 }
-
-//monitoring.Send(TxdBuffer, 4);
-//if (!monitoring.lora->radioHandler->TimerTxFired){
-    /*if (monitoring.firstTime){
-        monitoring.firstTime = false;
-        monitoring.lora->radioHandler->TimerTxTimeout = false;
-    }*/
 
 
 

@@ -166,8 +166,8 @@ protected:
     bool RxContinuous = false;
     PacketStatus_t RadioPktStatus;
 
-    uint32_t TxTimeout = 15000;
-    uint32_t RxTimeout = 5000;
+    uint32_t TxTimeout = 0;
+    uint32_t RxTimeout = 0;
     static bool IrqFired;
 
 

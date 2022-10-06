@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <string>
 
+#define SPIDEV0 "/dev/spidev32766.0"
 #define SPIDEV1 "/dev/spidev0.0"
 #define SPIDEV2 "/dev/spidev0.1"
 

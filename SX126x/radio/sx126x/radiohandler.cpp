@@ -708,12 +708,12 @@ void RadioHandler::BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler)
     irqRegs = sxDriver->GetIrqStatus(sxHandler);
     //std::cout << "Estado radio: " << irqRegs << std::endl;
     st = sxDriver->GetStatus(sxHandler);
-    std::cout << "Estado radio: " << std::hex << (int)st.Value << std::endl;
+    //std::cout << "Estado radio: " << std::hex << (int)st.Value << std::endl;
     sxDriver->ClearIrqStatus(IRQ_RADIO_ALL, sxHandler);
     if (irqRegs == 0 ) return;
 
     if ((irqRegs & IRQ_TX_DONE) == IRQ_TX_DONE) {
-        std::cout << "IRQ_TX_DONE" << std::endl;
+        //std::cout << "IRQ_TX_DONE" << std::endl;
         tx_timeout_handled = true;
         TimerStop(&TxTimeoutTimer);
         //!< Update operating mode state to a value lower than \ref MODE_STDBY_XOSC
@@ -727,7 +727,7 @@ void RadioHandler::BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler)
 
     if ((irqRegs & IRQ_RX_DONE) == IRQ_RX_DONE)
     {
-        std::cout << "IRQ_RX_DONE" << std::endl;
+        //std::cout << "IRQ_RX_DONE" << std::endl;
 
         uint8_t size;
 
@@ -792,7 +792,7 @@ void RadioHandler::BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler)
 
     if ((irqRegs & IRQ_RX_TX_TIMEOUT) == IRQ_RX_TX_TIMEOUT)
     {
-        std::cout << "IRQ_RX_TX_TIMEOUT" << std::endl;
+        //std::cout << "IRQ_RX_TX_TIMEOUT" << std::endl;
 
         if (sxDriver->GetOperatingMode() == MODE_TX)
         {
@@ -861,13 +861,13 @@ void RadioHandler::BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler)
         }
 
     }
-    std::cout << "TIMERS" << std::endl;
+    //std::cout << "TIMERS" << std::endl;
     if (TimerRxTimeout)
     {
         TimerRxTimeout = false;
         if (!rx_timeout_handled)
         {
-            std::cout << "TimerRxTimeout::IrqProcess" << std::endl;
+            //std::cout << "TimerRxTimeout::IrqProcess" << std::endl;
             TimerStop(&RxTimeoutTimer);
             for(auto irq : irqsEnable) {
                 if (irq == IRQ_ENABLE_RX_TX_TIMEOUT){
@@ -878,10 +878,10 @@ void RadioHandler::BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler)
     }
     if (TimerTxTimeout)
 	{
-        //std::cout << "TimerTxTimeout::IrqProcess" << std::endl;
 		TimerTxTimeout = false;
 		if (!tx_timeout_handled)
 		{
+            //std::cout << "TimerTxTimeout::IrqProcess" << std::endl;
 			TimerStop(&TxTimeoutTimer);
             for(auto irq : irqsEnable) {
                 if (irq == IRQ_ENABLE_RX_TX_TIMEOUT){

@@ -21,9 +21,6 @@ public:
     void SetTimeOut(uint32_t timeout){
         timeoutMs = timeout;
     }
-    /*void SetShot(bool shot){
-        Shot = shot;
-    }*/
     void SetTimeoutCallback(std::function<void(void)> timeoutCallback);
 
     void Run();

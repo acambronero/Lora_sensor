@@ -9,7 +9,7 @@ MonitoringHandler::MonitoringHandler()
 
 bool MonitoringHandler::Initialize()
 {
-    SPI_Lora = new SPILora(SPIDEV1);
+    SPI_Lora = new SPILora(SPIDEV0);
     spi_config settings = {0, 8, int(10e6), 0};
     SPI_Lora->SetConfig(&settings);
     SPI_Lora->Begin();

@@ -1,6 +1,6 @@
 #include "spilora.h"
-#include <thread>
-#include <chrono>
+#include "datahelper.h"
+
 
 
 SPILora::SPILora(std::string spi_p)
@@ -67,7 +67,7 @@ int SPILora::Transfer(uint8_t *p_txbuffer, uint8_t *p_rxbuffer, uint16_t len)
 
     errno = 0;
     result = ioctl(spi_fd, SPI_IOC_MESSAGE(1), &message);
-    std::this_thread::sleep_for(std::chrono::milliseconds(DELAY_TX));
+    sleep_milliseconds(DELAY_TX);
 
     //std::cout << strerror(errno) << std::endl;
     if (debug){
@@ -101,7 +101,7 @@ int SPILora::Write(uint8_t *p_txbuffer, uint16_t len)
     errno = 0;
     result = ioctl(spi_fd, SPI_IOC_MESSAGE(1), &message);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(DELAY_TX));
+    sleep_milliseconds(DELAY_TX);
 
     //std::cout << strerror(errno) << std::endl;
     if (debug){

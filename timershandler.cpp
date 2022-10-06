@@ -32,16 +32,6 @@ void TimersHandler::Start(uint8_t idx, uint32_t timeout, std::function<void(void
     threads[idx] = new std::thread(std::bind(&loratimersloop::Run, &timersloop[idx]));
 }
 
-/*void TimersHandler::StartShot(uint8_t idx, uint32_t timeout, std::function<void(void)> *callback)
-{
-    timersloop[idx].SetInterval(1);
-    timersloop[idx].SetTimeOut(timeout);
-    timersloop[idx].SetShot(true);
-    timersloop[idx].SetTimeoutCallback(*callback);
-
-    threads[idx] = new std::thread(std::bind(&loratimersloop::Run, &timersloop[idx]));
-}*/
-
 void TimersHandler::Stop(uint8_t idx)
 {
     timersloop[idx].NotifyExit();
