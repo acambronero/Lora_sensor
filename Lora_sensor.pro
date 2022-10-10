@@ -13,13 +13,13 @@ unix:LIBS += -pthread
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-INCLUDEPATH += /usr/include/
-INCLUDEPATH += /usr/local/include/
+#INCLUDEPATH += /usr/include/
+#INCLUDEPATH += /usr/local/include/
 
-LIBS += -L"/usr/lib"
-LIBS += -lwiringPi
+#LIBS += -L"/usr/lib"
+#LIBS += -lwiringPi
 
-DEFINES += RASPI
+#DEFINES += RASPI
 
 INCLUDEPATH += \
         $$PWD/SX126x \
@@ -36,6 +36,7 @@ SOURCES += \
         loratimersloop.cpp \
         main.cpp \
         monitoringhandler.cpp \
+        spiarduino.cpp \
         spibase.cpp \
         spilora.cpp \
         timershandler.cpp
@@ -55,6 +56,7 @@ HEADERS += \
     lorahandler.h \
     loratimersloop.h \
     monitoringhandler.h \
+    spiarduino.h \
     spibase.h \
     spilora.h \
     timershandler.h

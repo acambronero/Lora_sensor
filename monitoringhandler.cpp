@@ -1,6 +1,11 @@
 #include "monitoringhandler.h"
 #include "radiohandler.h"
+#ifdef ARDUINO
+#include "spiarduino.h"
+#include "Arduino.h"
+#endif
 
+//#include "spiarduino.h"
 
 MonitoringHandler::MonitoringHandler()
 {
@@ -9,10 +14,23 @@ MonitoringHandler::MonitoringHandler()
 
 bool MonitoringHandler::Initialize()
 {
+#ifdef ARDUINO
+    hw_config config_hw;
+    config_hw.PIN_LORA_RESET = 0;
+    config_hw.PIN_LORA_DIO_1 = 5;
+    config_hw.PIN_LORA_BUSY = 4;
+    config_hw.PIN_LORA_NSS = 15;
+    config_hw.PIN_LORA_SCLK = 14;
+    config_hw.PIN_LORA_MISO = 12;
+    config_hw.PIN_LORA_MOSI = 13;
+    SPI_Lora = new SPIArduino(config_hw);
+#else
     SPI_Lora = new SPILora(SPIDEV0);
     spi_config settings = {0, 8, int(10e6), 0};
     SPI_Lora->SetConfig(&settings);
     SPI_Lora->Begin();
+#endif
+
     lora->SetSpiLora(SPI_Lora);
     lora_setup();
 }
@@ -107,6 +125,18 @@ void MonitoringHandler::decode_message()
 void MonitoringHandler::Run()
 {
     lora->IrqProcess(&dataReady);
+}
+
+void MonitoringHandler::CheckSerialData()
+{
+#ifdef ARDUINO
+    if (!Serial.available()) return;
+    if (!Serial.readBytesUntil('\r', RcvSerialBuffer, BUFFER_SIZE)) return;
+
+    //lora.prepare_message();
+    //lora.Send(lora.TxdBuffer, lora.BufferSize);
+#endif
+
 }
 
 void MonitoringHandler::SetRx(uint32_t timeout){

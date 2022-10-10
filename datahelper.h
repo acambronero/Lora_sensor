@@ -13,6 +13,24 @@ enum MessageType {
     MESSAGE_TYPE_RESPONSE = 1
 };
 
+struct hw_config
+{
+    int PIN_LORA_RESET;				  // LORA RESET
+    int PIN_LORA_NSS;				  // LORA SPI CS
+    int PIN_LORA_SCLK;				  // LORA SPI CLK
+    int PIN_LORA_MISO;				  // LORA SPI MISO
+    int PIN_LORA_DIO_1;				  // LORA DIO_1
+    int PIN_LORA_BUSY;				  // LORA SPI BUSY
+    int PIN_LORA_MOSI;				  // LORA SPI MOSI
+    int RADIO_TXEN = -1;			  // LORA ANTENNA TX ENABLE (eByte E22 module only)
+    int RADIO_RXEN = -1;			  // LORA ANTENNA RX ENABLE (eByte E22 module only)
+    bool USE_DIO2_ANT_SWITCH = false; // Whether DIO2 is used to control the antenna
+    bool USE_DIO3_TCXO = false;		  // Whether DIO3 is used to control the oscillator
+    bool USE_DIO3_ANT_SWITCH = false; // Whether DIO2 is used to control the antenna
+    bool USE_LDO = false;			  // Whether SX126x uses LDO or DCDC power regulator
+    bool USE_RXEN_ANT_PWR = false;	  // Whether RX_EN is used as antenna power
+};
+
 struct DataHelperDeviceConnected
 {
     uint8_t type;

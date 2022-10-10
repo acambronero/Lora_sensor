@@ -87,8 +87,13 @@ public:
     void SetMaxPayloadLength(uint8_t max, SX126Handler *sxHandler);
     void SetPublicNetwork(bool enable, SX126Handler *sxHandler);
     uint32_t GetWakeupTime();
+#if ARDUINO
+    static void OnTxTimeoutIrq();
+    static void OnRxTimeoutIrq();
+#else
     void OnTxTimeoutIrq();
     void OnRxTimeoutIrq();
+#endif
     static void OnDioIrq();
     void BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler);
     void IrqProcess(uint8_t *dataReady, SX126Handler *sxHandler);
@@ -144,11 +149,13 @@ public:
 
     SX126Handler *sxHandler;
     uint8_t RadioRxPayload[255] = {0};
-    bool TimerRxFired = false;
-    bool TimerRxTimeout = false;
-    bool TimerTxFired = false;
+#ifdef ARDUINO
+    static bool TimerTxTimeout = false;
+    static bool TimerRxTimeout = false;
+#else
     bool TimerTxTimeout = false;
-
+    bool TimerRxTimeout = false;
+#endif
 
 protected:
 

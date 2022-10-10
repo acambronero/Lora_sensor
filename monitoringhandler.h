@@ -33,6 +33,7 @@ public:
     void Send(uint8_t *tx_buffer, uint16_t len, uint32_t TxTimeout, uint32_t RxTimeout);
     void decode_message();
     void Run();
+    void CheckSerialData();
     void GetPayloadData(uint8_t *payload, uint16_t size);
     void SetRx(uint32_t timeout);
 
@@ -49,6 +50,7 @@ protected:
     std::vector<IrqsActivated> irqs;
 
     uint16_t BufferSize;
+    uint8_t RcvSerialBuffer[BUFFER_SIZE];
     uint8_t RcvBuffer[BUFFER_SIZE];
     uint8_t TxdBuffer[BUFFER_SIZE];
 

@@ -10,10 +10,14 @@
 #ifdef RASPI
 #include "wiringPi.h"
 #endif
+#ifdef ARDUINO
+#include <SPI.h>
+#endif
 
 #define BUSY 24
 #define DIO1 25
 #define RESET 22
+
 
 class lorahandler;
 
@@ -34,8 +38,16 @@ void SX126Handler::DIOInit(void)
     pinMode(BUSY, INPUT);
     pinMode(RESET, OUTPUT);
     Reset();
+#elif defined ARDUINO
+    pinMode(_hwConfig.PIN_LORA_NSS, OUTPUT);
+    digitalWrite(_hwConfig.PIN_LORA_NSS, HIGH);
+    pinMode(_hwConfig.PIN_LORA_BUSY, INPUT);
+    pinMode(_hwConfig.PIN_LORA_DIO_1, INPUT);
+    pinMode(_hwConfig.PIN_LORA_RESET, OUTPUT);
+    Reset();
 #else
     ConfigureGPIO();
+    Reset();
 #endif
 
 }
@@ -70,7 +82,7 @@ void SX126Handler::WriteGPIO(uint8_t value)
 
 void SX126Handler::Reset(void)
 {
-#ifdef RASPI
+#if defined RASPI || defined ARDUINO
     digitalWrite(RESET, LOW);
     digitalWrite(RESET, HIGH);
 #else
@@ -82,7 +94,7 @@ void SX126Handler::Reset(void)
 void SX126Handler::WaitOnBusy(void)
 {
     auto start = std::chrono::steady_clock::now();
-#ifdef RASPI
+#if defined RASPI || defined ARDUINO
     while (digitalRead(BUSY) == HIGH)
 #else
     while (ReadGPIO() == 1)

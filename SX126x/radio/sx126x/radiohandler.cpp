@@ -15,6 +15,10 @@
 #define RX_BUFFER_BASE_ADDRESS 0x80
 
 bool RadioHandler::IrqFired = false;
+#ifdef ARDUINO
+    bool RadioHandler::TimerTxTimeout = false;
+    bool RadioHandler::TimerRxTimeout = false;
+#endif
 
 RadioHandler::RadioHandler()
 {
@@ -34,10 +38,13 @@ void RadioHandler::Init(SX126Handler *sxHandler) {
     sxDriver->SetTxParams(0, RADIO_RAMP_200_US, sxHandler);
 
     //Initialize driver timeout timers
-
+#ifdef ARDUINO
+    TimerInit(&RxTimeoutTimer, OnTxTimeoutIrq);
+    TimerInit(&TxTimeoutTimer, OnRxTimeoutIrq);
+#else
     TimerInit(&RxTimeoutTimer, std::bind(&RadioHandler::OnRxTimeoutIrq, this));
     TimerInit(&TxTimeoutTimer, std::bind(&RadioHandler::OnTxTimeoutIrq, this));
-
+#endif
 
 	IrqFired = false;
 }

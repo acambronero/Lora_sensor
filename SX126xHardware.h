@@ -2,7 +2,7 @@
 #define SX126XHARDWARE_H
 #include "stdint.h"
 #include "radio/sx126x/sx126x.h"
-#include "spilora.h"
+#include "spibase.h"
 
 class SX126Handler {
 
