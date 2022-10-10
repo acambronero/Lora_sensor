@@ -3,6 +3,8 @@
 #ifdef ARDUINO
 #include "spiarduino.h"
 #include "Arduino.h"
+#else
+#include "spilora.h"
 #endif
 
 //#include "spiarduino.h"

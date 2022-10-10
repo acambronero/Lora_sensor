@@ -1,7 +1,6 @@
 #ifndef MONITORINGHANDLER_H
 #define MONITORINGHANDLER_H
 
-#include "spilora.h"
 #include "spibase.h"
 #include "lorahandler.h"
 //#include "itools.h"
