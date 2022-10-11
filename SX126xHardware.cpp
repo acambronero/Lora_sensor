@@ -39,7 +39,7 @@ void SX126Handler::DIOInit(void)
     pinMode(spiLora->config_hw.PIN_LORA_BUSY, INPUT);
     pinMode(spiLora->config_hw.PIN_LORA_DIO_1, INPUT);
     pinMode(spiLora->config_hw.PIN_LORA_RESET, OUTPUT);
-    Reset();
+    digitalWrite(spiLora->config_hw.PIN_LORA_RESET, HIGH);
 #else
     ConfigureGPIO();
     Reset();
@@ -74,9 +74,11 @@ void SX126Handler::WriteGPIO(uint8_t value)
 
 void SX126Handler::Reset(void)
 {
-#if defined(RASPI) || defined(ARDUINO)
-    digitalWrite(RESET, LOW);
-    digitalWrite(RESET, HIGH);
+#if defined(RASPI)
+    //TODO
+#elif defined(ARDUINO)
+    digitalWrite(spiLora->config_hw.PIN_LORA_RESET, LOW);
+    digitalWrite(spiLora->config_hw.PIN_LORA_RESET, HIGH);
 #else
     WriteGPIO(0);
     WriteGPIO(1);

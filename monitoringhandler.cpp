@@ -18,15 +18,7 @@ MonitoringHandler::MonitoringHandler()
 bool MonitoringHandler::Initialize()
 {
 #ifdef ARDUINO
-    hw_config config_hw;
-    config_hw.PIN_LORA_RESET = 0;
-    config_hw.PIN_LORA_DIO_1 = 5;
-    config_hw.PIN_LORA_BUSY = 4;
-    config_hw.PIN_LORA_NSS = 15;
-    config_hw.PIN_LORA_SCLK = 14;
-    config_hw.PIN_LORA_MISO = 12;
-    config_hw.PIN_LORA_MOSI = 13;
-    SPI_Lora = new SPIArduino(config_hw);
+    SPI_Lora = new SPIArduino();
 #else
     SPI_Lora = new SPILora(SPIDEV1);
     spi_config settings = {0, 8, int(10e6), 0};

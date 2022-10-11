@@ -78,8 +78,8 @@ void sleep_microseconds(double time){
 void println(std::string msg)
 {
 #ifdef ARDUINO
-    Serial.println(msg.c_str())
-        #else
+    Serial.println(msg.c_str());
+#else
     std::cout << msg.c_str() << std::endl;
 #endif
 }

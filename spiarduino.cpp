@@ -1,15 +1,23 @@
 #include "spiarduino.h"
 
-SPIArduino::SPIArduino(hw_config config): SPIBase() {
+SPIArduino::SPIArduino(): SPIBase()
+{
+    config_hw.PIN_LORA_RESET = 0;
+    config_hw.PIN_LORA_DIO_1 = 5;
+    config_hw.PIN_LORA_BUSY = 4;
+    config_hw.PIN_LORA_NSS = 15;
+    config_hw.PIN_LORA_SCLK = 14;
+    config_hw.PIN_LORA_MISO = 12;
+    config_hw.PIN_LORA_MOSI = 13;
+
 #ifdef ARDUINO
     spiSettings = new SPISettings(2000000, MSBFIRST, SPI_MODE0);
-    config_hw = config;
     spiLora = new SPIClass();
 #endif
 }
 
 bool SPIArduino::IsInitialized() {
-    return spi_open;
+    return pins_ok;
 }
 
 bool SPIArduino::Begin() {
@@ -27,8 +35,7 @@ int SPIArduino::Transfer(uint8_t *p_txbuffer, uint8_t *p_rxbuffer, uint16_t len)
 
     spiLora->beginTransaction(*spiSettings);
 
-    for (uint16_t i = 0; i < len; i++)
-    {
+    for (uint16_t i = 0; i < len; i++) {
         p_rxbuffer[i] = spiLora->transfer(p_txbuffer[i]);
     }
 
@@ -44,15 +51,14 @@ int SPIArduino::Write(uint8_t *p_txbuffer, uint16_t len) {
 
     spiLora->beginTransaction(*spiSettings);
 
-    for (uint16_t i = 0; i < len; i++)
-    {
+    for (uint16_t i = 0; i < len; i++) {
         spiLora->transfer(p_txbuffer[i]);
     }
 
     spiLora->endTransaction();
     digitalWrite(config_hw.PIN_LORA_NSS, HIGH);
-    return 0;
 #endif
+    return 0;
 }
 
 int SPIArduino::Read(uint8_t *p_rxbuffer, uint16_t len)

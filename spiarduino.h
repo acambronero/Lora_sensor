@@ -13,7 +13,7 @@ class SPISettings;
 class SPIArduino : public SPIBase
 {
 public:
-    SPIArduino(hw_config config);
+    SPIArduino();
     virtual bool IsInitialized();
     virtual bool Begin();
     virtual int Transfer(uint8_t *p_txbuffer, uint8_t *p_rxbuffer, uint16_t len);
