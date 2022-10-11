@@ -1,8 +1,8 @@
-#include "lorahandler.h"
-#include "radio/sx126x/sx126x.h"
 #include <string>
+#include "lorahandler.h"
+#include "SX126x/radio/sx126x/sx126x.h"
+#include "SX126x/radio/radiohandler.h"
 #include "SX126xHardware.h"
-#include "spilora.h"
 #include <iostream>
 
 lorahandler::lorahandler()
@@ -15,22 +15,17 @@ lorahandler::lorahandler()
     radioHandler->sxHandler = sxHandler;
 }
 
-void lorahandler::TestSpi(SPILora *lora)
+/*void lorahandler::TestSpi(SPILora *lora)
 {
     uint8_t a[] = {0x23, 0x60};
     uint8_t b[] = {0, 0};
 
     lora->Transfer(a, b, 2);
-}
+}*/
 
 void lorahandler::SetSpiLora(SPIBase *lora)
 {
     sxHandler->SetSpiLora(lora);
-}
-
-void lorahandler::SetIrqsEnable(std::vector<IrqsActivated> irq)
-{
-    radioHandler->SetIrqsEnable(irq);
 }
 
 void lorahandler::Init()

@@ -19,12 +19,14 @@ typedef struct {
     uint16_t delay;
 } spi_config;
 
+#ifndef ARDUINO
 enum SPI_MODE {
     SPI_MODE0 = 0x00,   // rest = 0, latch on rise
     SPI_MODE1 = 0x01,  // rest = 0, latch on fall
     SPI_MODE2 = 0x02,  // rest = 1, latch on fall
     SPI_MODE3 = 0x03  // rest = 1, latch on rise
 };
+#endif
 
 class SPIBase
 {
@@ -36,7 +38,6 @@ protected:
     SPIClass spiLora;
     SPISettings spiSettings;
 #endif
-    hw_config config_hw;
     bool spi_open = false;
 
 public:
@@ -52,6 +53,7 @@ public:
     virtual bool SetBitsPerWord(uint8_t bits_per_word)=0;
 
     bool debug = false;
+    hw_config config_hw;
 };
 
 #endif // SPIBASE_H

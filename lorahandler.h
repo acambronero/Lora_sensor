@@ -1,16 +1,17 @@
 #ifndef LORAHANDLER_H
 #define LORAHANDLER_H
 
-#include "radio/radiohandler.h"       //if Arduino --> radio/radio.h
-#include "radio/sx126x/sx126x.h"
+#include "SX126x/radio/sx126x/sx126x.h"
 #include "datahelper.h"
 #include "stdint.h"
+#include "SX126xHardware.h"
+#include "spibase.h"
 
 
 #define BUFFER_SIZE 64
 
-class SX126Handler;
-class SPILora;
+//class SX126Handler;
+//class RadioHandler;
 
 
 class lorahandler
@@ -18,9 +19,8 @@ class lorahandler
 public:
     lorahandler();
 
-    void TestSpi(SPILora* lora);
+    //void TestSpi(SPILora* lora);
     void SetSpiLora(SPIBase* lora);
-    void SetIrqsEnable(std::vector<IrqsActivated> irq);
     uint32_t HardwareInit();
     void Init();
     void SetChannel(uint32_t freq);
@@ -47,9 +47,9 @@ public:
     uint8_t RcvSerialBuffer[BUFFER_SIZE];
     uint8_t TxdBuffer[BUFFER_SIZE];
     bool sensor = false;
-    SX126Handler *sxHandler;
-    RadioHandler *radioHandler;
-    SX126xDriver *sxDriver;
+    SX126Handler *sxHandler = nullptr;
+    RadioHandler *radioHandler = nullptr;
+    SX126xDriver *sxDriver = nullptr;
 
 private:
 

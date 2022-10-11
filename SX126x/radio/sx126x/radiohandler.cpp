@@ -2,8 +2,8 @@
 #include <string.h>
 #include <unistd.h>
 #include "SX126xHardware.h"
-#include "mcu/timer.h"
-#include "radiohandler.h"
+#include "SX126x/boards/mcu/timer.h"
+#include "SX126x/radio/radiohandler.h"
 //#include "itools.h"
 #ifdef RASPI
 #include "wiringPi.h"
@@ -23,6 +23,9 @@ bool RadioHandler::IrqFired = false;
 RadioHandler::RadioHandler()
 {
     sxDriver = new SX126xDriver();
+    irqsEnable.push_back(IRQ_ENABLE_RX_DONE);
+    irqsEnable.push_back(IRQ_ENABLE_TX_DONE);
+    irqsEnable.push_back(IRQ_ENABLE_RX_TX_TIMEOUT);
 }
 
 /*!
@@ -49,10 +52,6 @@ void RadioHandler::Init(SX126Handler *sxHandler) {
 	IrqFired = false;
 }
 
-void RadioHandler::SetIrqsEnable(std::vector<IrqsActivated> irq)
-{
-    irqsEnable = irq;
-}
 
 /*!
  * Return current radio status

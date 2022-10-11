@@ -20,6 +20,7 @@ public:
     virtual bool SetMode(uint8_t mode);
     virtual bool SetSpeed(uint32_t speed);
     virtual bool SetBitsPerWord(uint8_t bits_per_word);
+protected:
 };
 
 #endif // SPIARDUINO_H

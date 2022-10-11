@@ -1,11 +1,11 @@
 #include "monitoringhandler.h"
+#include "SX126x/radio/radiohandler.h"
 #include "unistd.h"
 #include "timershandler.h"
 #include <thread>
 #include <chrono>
 #include "datahelper.h"
 #include <iostream>
-
 
 int a = 1;
 
@@ -39,6 +39,7 @@ int main(){
             monitoring.Run();
             if (monitoring.dataReady) {
                 data = monitoring.lora->radioHandler->GetPayloadData(size);
+
                 std::cout << "Data Received: " << std::endl;
                 std::cout << data[0] << std::endl;
                 std::cout << data[1] << std::endl;

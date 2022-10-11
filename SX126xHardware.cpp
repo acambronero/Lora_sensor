@@ -1,11 +1,12 @@
 #include "SX126xHardware.h"
-#include "spilora.h"
+//#include "spilora.h"
 #include <algorithm>
 #include <iostream>
 #include <chrono>
 #include <thread>
 #include <string>
 #include <fstream>
+#include "lorahandler.h"
 
 #ifdef RASPI
 #include "wiringPi.h"
@@ -19,7 +20,7 @@
 #define RESET 22
 
 
-class lorahandler;
+//class lorahandler;
 
 SX126Handler::SX126Handler()
 {
@@ -39,17 +40,16 @@ void SX126Handler::DIOInit(void)
     pinMode(RESET, OUTPUT);
     Reset();
 #elif defined ARDUINO
-    pinMode(_hwConfig.PIN_LORA_NSS, OUTPUT);
-    digitalWrite(_hwConfig.PIN_LORA_NSS, HIGH);
-    pinMode(_hwConfig.PIN_LORA_BUSY, INPUT);
-    pinMode(_hwConfig.PIN_LORA_DIO_1, INPUT);
-    pinMode(_hwConfig.PIN_LORA_RESET, OUTPUT);
+    pinMode(spiLora->config_hw.PIN_LORA_NSS, OUTPUT);
+    digitalWrite(spiLora->config_hw.PIN_LORA_NSS, HIGH);
+    pinMode(spiLora->config_hw.PIN_LORA_BUSY, INPUT);
+    pinMode(spiLora->config_hw.PIN_LORA_DIO_1, INPUT);
+    pinMode(spiLora->config_hw.PIN_LORA_RESET, OUTPUT);
     Reset();
 #else
     ConfigureGPIO();
     Reset();
 #endif
-
 }
 
 void SX126Handler::ConfigureGPIO()

@@ -56,6 +56,7 @@ HEADERS += \
     lorahandler.h \
     loratimersloop.h \
     monitoringhandler.h \
+    radiodefinitions.h \
     spiarduino.h \
     spibase.h \
     spilora.h \

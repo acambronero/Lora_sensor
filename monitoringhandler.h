@@ -6,6 +6,7 @@
 //#include "itools.h"
 #include <string>
 #include <vector>
+#include <iostream>
 
 #define RF_FREQUENCY 868000000	// Hz
 #define TX_OUTPUT_POWER 22		// dBm
@@ -21,6 +22,7 @@
 
 #define BUFFER_SIZE 127 // Define the payload size here
 
+class RadioHandler;
 
 class MonitoringHandler
 {
@@ -33,10 +35,9 @@ public:
     void decode_message();
     void Run();
     void CheckSerialData();
-    void GetPayloadData(uint8_t *payload, uint16_t size);
     void SetRx(uint32_t timeout);
 
-    lorahandler *lora;
+    lorahandler *lora = nullptr;
     bool firstTime = true;
     uint8_t dataReady = 0;
     uint8_t sendReady = 0;
@@ -45,7 +46,7 @@ public:
 
 protected:
 
-    SPIBase *SPI_Lora;
+    SPIBase *SPI_Lora = nullptr;
     std::vector<IrqsActivated> irqs;
 
     uint16_t BufferSize;

@@ -4,7 +4,7 @@
 #include "stdint.h"
 #include "stdbool.h"
 #ifdef ARDUINO
-#include Ticker.h
+#include "Ticker.h"
 #endif
 #include <functional>
 

@@ -1,13 +1,11 @@
 #include "monitoringhandler.h"
-#include "radiohandler.h"
+#include "SX126x/radio/radiohandler.h"
 #ifdef ARDUINO
 #include "spiarduino.h"
 #include "Arduino.h"
 #else
 #include "spilora.h"
 #endif
-
-//#include "spiarduino.h"
 
 MonitoringHandler::MonitoringHandler()
 {
@@ -32,7 +30,6 @@ bool MonitoringHandler::Initialize()
     SPI_Lora->SetConfig(&settings);
     SPI_Lora->Begin();
 #endif
-
     lora->SetSpiLora(SPI_Lora);
     lora_setup();
 }
@@ -48,12 +45,6 @@ void MonitoringHandler::lora_setup()
     if ( lora->HardwareInit() < 0) {
         printf("Something is wrong !!\n");
     }
-
-    irqs.push_back(IRQ_ENABLE_RX_DONE);
-    irqs.push_back(IRQ_ENABLE_TX_DONE);
-    irqs.push_back(IRQ_ENABLE_RX_TX_TIMEOUT);
-
-    lora->SetIrqsEnable(irqs);
 
     lora->Init();
 
@@ -127,6 +118,11 @@ void MonitoringHandler::decode_message()
 void MonitoringHandler::Run()
 {
     lora->IrqProcess(&dataReady);
+}
+
+void MonitoringHandler::GetPayloadData(uint8_t *payload, uint16_t size)
+{
+
 }
 
 void MonitoringHandler::CheckSerialData()

@@ -2,7 +2,7 @@
 #define __RADIOHANDLER_H__
 
 #include "stdint.h"
-#include "mcu/timer.h"
+#include "SX126x/boards/mcu/timer.h"
 #include "SX126xHardware.h"
 #include <vector>
 #include "datahelper.h"
@@ -10,50 +10,11 @@
 #define BUFFER_SIZE 64
 
 
-class SX126xDriver;
+//class SX126xDriver;
+//class SX126Handler;
 
-/*!
- * Radio driver supported modems
- */
-typedef enum
-{
-	MODEM_FSK = 0,
-	MODEM_LORA,
-} RadioModems_t;
 
-/*!
- * Radio driver internal state machine states definition
- */
-typedef enum
-{
-	RF_IDLE = 0,   //!< The radio is idle
-	RF_RX_RUNNING, //!< The radio is in reception state
-	RF_TX_RUNNING, //!< The radio is in transmission state
-	RF_CAD,		   //!< The radio is doing channel activity detection
-} RadioState_t;
 
-/*!
- * Holds the current network type for the radio
- */
-typedef struct
-{
-    bool Previous;
-    bool Current;
-} RadioPublicNetwork_t;
-
-typedef enum {
-    IRQ_ENABLE_TX_DONE = 0,
-    IRQ_ENABLE_RX_DONE,
-    IRQ_ENABLE_CRC_ERROR,
-    IRQ_ENABLE_CAD_DONE,
-    IRQ_ENABLE_RX_TX_TIMEOUT,
-    IRQ_ENABLE_PREAMBLE_DETECTED,
-    IRQ_ENABLE_SYNCWORD_VALID,
-    IRQ_ENABLE_HEADER_VALID,
-    IRQ_ENABLE_HEADER_ERROR
-} IrqsActivated;
-
-class SX126Handler;
 
 /*!
  * \brief Radio driver definition
@@ -63,8 +24,8 @@ class RadioHandler
 
 public:
     RadioHandler();
+    ~RadioHandler();
     void Init(SX126Handler *sxHandler);
-    void SetIrqsEnable(std::vector<IrqsActivated> irq);
     RadioState_t GetStatus(SX126Handler *sxHandler);
     void SetModem(RadioModems_t modem, SX126Handler *sxHandler);
     void SetChannel(uint32_t freq, SX126Handler *sxHandler);
@@ -150,8 +111,8 @@ public:
     SX126Handler *sxHandler;
     uint8_t RadioRxPayload[255] = {0};
 #ifdef ARDUINO
-    static bool TimerTxTimeout = false;
-    static bool TimerRxTimeout = false;
+    static bool TimerTxTimeout;
+    static bool TimerRxTimeout;
 #else
     bool TimerTxTimeout = false;
     bool TimerRxTimeout = false;
@@ -184,7 +145,7 @@ protected:
     uint8_t RcvBuffer[BUFFER_SIZE];
     uint8_t TxdBuffer[BUFFER_SIZE];
     SX126x_t SX126x;
-    SX126xDriver *sxDriver;
+    SX126xDriver *sxDriver = nullptr;
     uint8_t triesToSend = 0;
 
     uint8_t message_type = 0;

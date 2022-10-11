@@ -1,6 +1,6 @@
 #include <math.h>
 #include <string.h>
-#include "sx126x.h"
+#include "SX126x/radio/sx126x/sx126x.h"
 #include "SX126xHardware.h"
 #include <iostream>
 class SX126Handler;

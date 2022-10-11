@@ -13,6 +13,18 @@ enum MessageType {
     MESSAGE_TYPE_RESPONSE = 1
 };
 
+typedef enum {
+    IRQ_ENABLE_TX_DONE = 0,
+    IRQ_ENABLE_RX_DONE,
+    IRQ_ENABLE_CRC_ERROR,
+    IRQ_ENABLE_CAD_DONE,
+    IRQ_ENABLE_RX_TX_TIMEOUT,
+    IRQ_ENABLE_PREAMBLE_DETECTED,
+    IRQ_ENABLE_SYNCWORD_VALID,
+    IRQ_ENABLE_HEADER_VALID,
+    IRQ_ENABLE_HEADER_ERROR
+} IrqsActivated;
+
 struct hw_config
 {
     int PIN_LORA_RESET;				  // LORA RESET
@@ -89,7 +101,9 @@ T Abs(T x){
 }
 
 uint64_t Timestamp();
+#ifndef ARDUINO
 void sleep_milliseconds(double time);
 void sleep_microseconds(double time);
+#endif
 
 #endif
