@@ -40,6 +40,7 @@ void SX126Handler::DIOInit(void)
     pinMode(spiLora->config_hw.PIN_LORA_DIO_1, INPUT);
     pinMode(spiLora->config_hw.PIN_LORA_RESET, OUTPUT);
     digitalWrite(spiLora->config_hw.PIN_LORA_RESET, HIGH);
+    Reset();
 #else
     ConfigureGPIO();
     Reset();
@@ -88,8 +89,10 @@ void SX126Handler::Reset(void)
 void SX126Handler::WaitOnBusy(void)
 {
     auto start = std::chrono::steady_clock::now();
-#if defined(RASPI) || defined(ARDUINO)
+#if defined(RASPI)
     while (digitalRead(BUSY) == HIGH)
+#elif defined(ARDUINO)
+    while (digitalRead(spiLora->config_hw.PIN_LORA_BUSY) == HIGH)
 #else
     while (ReadGPIO() == 1)
 #endif

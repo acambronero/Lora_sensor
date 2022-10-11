@@ -15,8 +15,8 @@
 #define LORA_SYMBOL_TIMEOUT 0	// Symbols
 #define LORA_FIX_LENGTH_PAYLOAD_ON false
 #define LORA_IQ_INVERSION_ON false
-#define RX_TIMEOUT_VALUE 5000
-#define TX_TIMEOUT_VALUE 5000
+#define RX_TIMEOUT_VALUE 40000
+#define TX_TIMEOUT_VALUE 20000
 
 #define BUFFER_SIZE 127 // Define the payload size here
 

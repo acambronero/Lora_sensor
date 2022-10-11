@@ -44,8 +44,8 @@ void RadioHandler::Init(SX126Handler *sxHandler) {
 
     //Initialize driver timeout timers
 #ifdef ARDUINO
-    TimerInit(&RxTimeoutTimer, OnTxTimeoutIrq);
-    TimerInit(&TxTimeoutTimer, OnRxTimeoutIrq);
+    //TimerInit(&RxTimeoutTimer, OnTxTimeoutIrq);
+    //TimerInit(&TxTimeoutTimer, OnRxTimeoutIrq);
 #else
     TimerInit(&RxTimeoutTimer, std::bind(&RadioHandler::OnRxTimeoutIrq, this));
     TimerInit(&TxTimeoutTimer, std::bind(&RadioHandler::OnTxTimeoutIrq, this));
@@ -301,6 +301,7 @@ void RadioHandler::SetRxConfig (uint32_t bandwidth, uint32_t datarate, uint8_t c
     // Timeout Max, Timeout handled directly in SetRx function
     //RxTimeout = 0xFA0;
     this->RxTimeout = RxTimeout;
+    Rx(0, sxHandler);
     //std::cout << "timeout:RadioHandler::Rxconfig: " << RxTimeout << std::endl;
 
 }
@@ -473,8 +474,8 @@ void RadioHandler::Send(uint8_t *buffer, uint8_t size, uint32_t TxTimeout, uint3
         this->RxTimeout = RxTimeout;
     }
     sxDriver->SendPayload(buffer, size, this->TxTimeout, sxHandler);
-    TimerSetValue(&TxTimeoutTimer, this->TxTimeout);
-    TimerStart(&TxTimeoutTimer);
+    //TimerSetValue(&TxTimeoutTimer, this->TxTimeout);
+    //TimerStart(&TxTimeoutTimer);
     //TimerTxFired = true;
 }
 
@@ -508,6 +509,8 @@ void RadioHandler::Rx(uint32_t timeout, SX126Handler *sxHandler)
 {
 	if (RxContinuous == true)
 	{
+        std::cout << "RadioHandler::RxContinous" << std::endl;
+        sxDriver->SetDioIrqParams(IRQ_RX_DONE, IRQ_RX_DONE, IRQ_RADIO_NONE, IRQ_RADIO_NONE, sxHandler);
 		// Even Continous mode is selected, put a timeout here
 		if (timeout != 0)
 		{
@@ -518,8 +521,8 @@ void RadioHandler::Rx(uint32_t timeout, SX126Handler *sxHandler)
 	}
 	else
 	{
-        TimerSetValue(&RxTimeoutTimer, timeout);
-        TimerStart(&RxTimeoutTimer);
+        //TimerSetValue(&RxTimeoutTimer, timeout);
+        //TimerStart(&RxTimeoutTimer);
         sxDriver->SetRx(timeout << 6, sxHandler);
 	}
 }
@@ -723,7 +726,7 @@ void RadioHandler::BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler)
     if ((irqRegs & IRQ_TX_DONE) == IRQ_TX_DONE) {
         //std::cout << "IRQ_TX_DONE" << std::endl;
         tx_timeout_handled = true;
-        TimerStop(&TxTimeoutTimer);
+        //TimerStop(&TxTimeoutTimer);
         //!< Update operating mode state to a value lower than \ref MODE_STDBY_XOSC
         sxDriver->SetOperatingMode(MODE_STDBY_RC);
         for(auto irq : irqsEnable) {
@@ -735,7 +738,7 @@ void RadioHandler::BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler)
 
     if ((irqRegs & IRQ_RX_DONE) == IRQ_RX_DONE)
     {
-        //std::cout << "IRQ_RX_DONE" << std::endl;
+        std::cout << "IRQ_RX_DONE" << std::endl;
 
         uint8_t size;
 
@@ -745,7 +748,7 @@ void RadioHandler::BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler)
         {
             //std::cout << "TIMER RX DONE" << std::endl;
 
-            TimerStop(&RxTimeoutTimer);
+            //TimerStop(&RxTimeoutTimer);
             //!< Update operating mode state to a value lower than \ref MODE_STDBY_XOSC
             sxDriver->SetOperatingMode(MODE_STDBY_RC);
 
@@ -800,12 +803,12 @@ void RadioHandler::BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler)
 
     if ((irqRegs & IRQ_RX_TX_TIMEOUT) == IRQ_RX_TX_TIMEOUT)
     {
-        //std::cout << "IRQ_RX_TX_TIMEOUT" << std::endl;
+        std::cout << "IRQ_RX_TX_TIMEOUT" << std::endl;
 
         if (sxDriver->GetOperatingMode() == MODE_TX)
         {
             tx_timeout_handled = true;
-            TimerStop(&TxTimeoutTimer);
+            //TimerStop(&TxTimeoutTimer);
             //!< Update operating mode state to a value lower than \ref MODE_STDBY_XOSC
             sxDriver->SetOperatingMode(MODE_STDBY_RC);
             for(auto irq : irqsEnable) {
@@ -817,7 +820,7 @@ void RadioHandler::BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler)
         else if (sxDriver->GetOperatingMode() == MODE_RX)
         {
             rx_timeout_handled = true;
-            TimerStop(&RxTimeoutTimer);
+            //TimerStop(&RxTimeoutTimer);
             //!< Update operating mode state to a value lower than \ref MODE_STDBY_XOSC
             sxDriver->SetOperatingMode(MODE_STDBY_RC);
             for(auto irq : irqsEnable) {
@@ -875,8 +878,8 @@ void RadioHandler::BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler)
         TimerRxTimeout = false;
         if (!rx_timeout_handled)
         {
-            //std::cout << "TimerRxTimeout::IrqProcess" << std::endl;
-            TimerStop(&RxTimeoutTimer);
+            std::cout << "TimerRxTimeout::IrqProcess" << std::endl;
+            //TimerStop(&RxTimeoutTimer);
             for(auto irq : irqsEnable) {
                 if (irq == IRQ_ENABLE_RX_TX_TIMEOUT){
                     OnRxTimeout();
@@ -889,8 +892,8 @@ void RadioHandler::BgIrqProcess(uint8_t *dataReady, SX126Handler *sxHandler)
 		TimerTxTimeout = false;
 		if (!tx_timeout_handled)
 		{
-            //std::cout << "TimerTxTimeout::IrqProcess" << std::endl;
-			TimerStop(&TxTimeoutTimer);
+            std::cout << "TimerTxTimeout::IrqProcess" << std::endl;
+            //TimerStop(&TxTimeoutTimer);
             for(auto irq : irqsEnable) {
                 if (irq == IRQ_ENABLE_RX_TX_TIMEOUT){
                     OnTxTimeout();
@@ -919,7 +922,7 @@ void RadioHandler::IrqProcessAfterDeepSleep(uint8_t *dataReady, SX126Handler *sx
 
 void RadioHandler::OnTxDone()
 {
-    //std::cout << "OnTxDone" << std::endl;
+    std::cout << "OnTxDone" << std::endl;
     TimerTxTimeout = true;
     //TimerTxFired = false;
 
@@ -933,9 +936,10 @@ void RadioHandler::OnTxDone()
 
 void RadioHandler::OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
 {
-    //sxDriver->ClearIrqStatus(IRQ_RADIO_ALL, sxHandler);
+    std::cout << "RadioHandler::OnRxDone" << std::endl;
+    sxDriver->ClearIrqStatus(IRQ_RADIO_ALL, sxHandler);
     //sxDriver->SetDioIrqParams(IRQ_PREAMBLE_DETECTED, IRQ_PREAMBLE_DETECTED, IRQ_RADIO_NONE, IRQ_RADIO_NONE, sxHandler);
-    //Rx(0, sxHandler);
+    Rx(0, sxHandler);
 
     /* Switch case depends on the payload receive
      *
@@ -957,8 +961,8 @@ void RadioHandler::OnTxTimeout()
     std::cout << "Unable to send, let's try again. Attempt: " << triesToSend << std::endl;
 
     sxDriver->SetTx(this->TxTimeout, sxHandler);
-    TimerSetValue(&TxTimeoutTimer, this->TxTimeout);
-    TimerStart(&TxTimeoutTimer);
+    //TimerSetValue(&TxTimeoutTimer, this->TxTimeout);
+    //TimerStart(&TxTimeoutTimer);
     //Let's try 3 times
 }
 

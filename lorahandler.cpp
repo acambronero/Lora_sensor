@@ -72,13 +72,7 @@ std::array<uint8_t, 255> LoraHandler::GetPayloadData(uint16_t size)
 {
     std::array<uint8_t, 255> data;
     data = radioHandler->GetPayloadData(size);
-
-
-    std::cout << "Data Received: " << std::endl;
-    std::cout << data[0] << std::endl;
-    std::cout << data[1] << std::endl;
-    std::cout << data[2] << std::endl;
-    std::cout << data[3] << std::endl;
+    return data;
 
 }
 
