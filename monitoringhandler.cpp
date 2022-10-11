@@ -25,7 +25,7 @@ bool MonitoringHandler::Initialize()
     config_hw.PIN_LORA_MOSI = 13;
     SPI_Lora = new SPIArduino(config_hw);
 #else
-    SPI_Lora = new SPILora(SPIDEV0);
+    SPI_Lora = new SPILora(SPIDEV1);
     spi_config settings = {0, 8, int(10e6), 0};
     SPI_Lora->SetConfig(&settings);
     SPI_Lora->Begin();
@@ -120,9 +120,14 @@ void MonitoringHandler::Run()
     lora->IrqProcess(&dataReady);
 }
 
-void MonitoringHandler::GetPayloadData(uint8_t *payload, uint16_t size)
+std::array<uint8_t, 255> MonitoringHandler::GetPayloadData(uint16_t size)
 {
 
+    //std::array<uint8_t, 255> data;
+
+    //std::copy(std::begin(payload), std::end(payload), std::begin(data));
+
+    lora->GetPayloadData(size);
 }
 
 void MonitoringHandler::CheckSerialData()

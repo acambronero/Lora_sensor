@@ -37,7 +37,7 @@ public:
     void SetRxBoosted(uint32_t timeout);
     void Send(uint8_t *buffer, uint8_t size, uint32_t TxTimeout, uint32_t RxTimeout);
     void IrqProcess(uint8_t *dataReady);
-    void GetPayloadData(uint8_t& payload, uint16_t size);
+    std::array<uint8_t, 255> GetPayloadData(uint16_t size);
 
     RadioStatus_t Get_Status();
     RadioError_t Get_DeviceErrors();

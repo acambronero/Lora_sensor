@@ -38,13 +38,14 @@ int main(){
     while (a){
             monitoring.Run();
             if (monitoring.dataReady) {
-                data = monitoring.lora->radioHandler->GetPayloadData(size);
-
-                std::cout << "Data Received: " << std::endl;
+                //data = monitoring.lora->radioHandler->GetPayloadData(size);
+                data = monitoring.GetPayloadData(size);
+                /*std::cout << "Data Received: " << std::endl;
                 std::cout << data[0] << std::endl;
                 std::cout << data[1] << std::endl;
                 std::cout << data[2] << std::endl;
-                std::cout << data[3] << std::endl;
+                std::cout << data[3] << std::endl;*/
+
                 monitoring.dataReady = 0;
                 monitoring.sendReady = 1;
             }

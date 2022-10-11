@@ -34,6 +34,7 @@ public:
     void Send(uint8_t *tx_buffer, uint16_t len, uint32_t TxTimeout, uint32_t RxTimeout);
     void decode_message();
     void Run();
+    std::array<uint8_t, 255> GetPayloadData(uint16_t size);
     void CheckSerialData();
     void SetRx(uint32_t timeout);
 
