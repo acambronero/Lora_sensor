@@ -1,17 +1,20 @@
 #ifndef LORAHANDLER_H
 #define LORAHANDLER_H
 
-#include "SX126x/radio/sx126x/sx126x.h"
+//#include "SX126x/radio/sx126x/sx126x.h"
 #include "datahelper.h"
-#include "stdint.h"
-#include "SX126xHardware.h"
-#include "spibase.h"
+#include "radiodefinitions.h"
+#include <array>
+//#include "SX126xHardware.h"
+//#include "spibase.h"
 
 
 #define BUFFER_SIZE 64
 
-//class SX126Handler;
-//class RadioHandler;
+class RadioHandler;
+class SX126Handler;
+class SX126xDriver;
+class SPIBase;
 
 
 class lorahandler

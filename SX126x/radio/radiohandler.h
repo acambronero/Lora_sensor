@@ -3,18 +3,15 @@
 
 #include "stdint.h"
 #include "SX126x/boards/mcu/timer.h"
-#include "SX126xHardware.h"
 #include <vector>
+#include "radiodefinitions.h"
 #include "datahelper.h"
 
 #define BUFFER_SIZE 64
 
 
-//class SX126xDriver;
-//class SX126Handler;
-
-
-
+class SX126xDriver;
+class SX126Handler;
 
 /*!
  * \brief Radio driver definition

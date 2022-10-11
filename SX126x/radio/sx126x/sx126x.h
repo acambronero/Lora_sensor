@@ -11,8 +11,6 @@ class SX126Handler;
 class RadioHandler;
 
 
-
-
 //#define RX_BUFFER_SIZE 256
 
 /*!

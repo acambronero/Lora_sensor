@@ -1,12 +1,13 @@
 #ifndef MONITORINGHANDLER_H
 #define MONITORINGHANDLER_H
 
-#include "spibase.h"
-#include "lorahandler.h"
+//#include "spibase.h"
+//#include "lorahandler.h"
 //#include "itools.h"
 #include <string>
 #include <vector>
 #include <iostream>
+#include <array>
 
 #define RF_FREQUENCY 868000000	// Hz
 #define TX_OUTPUT_POWER 22		// dBm
@@ -22,7 +23,9 @@
 
 #define BUFFER_SIZE 127 // Define the payload size here
 
-class RadioHandler;
+//class RadioHandler;
+class lorahandler;
+class SPIBase;
 
 class MonitoringHandler
 {
@@ -48,8 +51,6 @@ public:
 protected:
 
     SPIBase *SPI_Lora = nullptr;
-    std::vector<IrqsActivated> irqs;
-
     uint16_t BufferSize;
     uint8_t RcvSerialBuffer[BUFFER_SIZE];
     uint8_t RcvBuffer[BUFFER_SIZE];

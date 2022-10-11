@@ -1,8 +1,12 @@
 #ifndef SX126XHARDWARE_H
 #define SX126XHARDWARE_H
 #include "stdint.h"
-#include "SX126x/radio/sx126x/sx126x.h"
-#include "spibase.h"
+#include "radiodefinitions.h"
+//#include "SX126x/radio/sx126x/sx126x.h"
+//#include "spibase.h"
+
+class SX126xDriver;
+class SPIBase;
 
 class SX126Handler {
 

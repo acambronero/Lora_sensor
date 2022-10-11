@@ -1,12 +1,14 @@
 #include "SX126xHardware.h"
-//#include "spilora.h"
+#include "spibase.h"
+#include "lorahandler.h"
+#include "SX126x/radio/sx126x/sx126x.h"
 #include <algorithm>
 #include <iostream>
 #include <chrono>
 #include <thread>
 #include <string>
 #include <fstream>
-#include "lorahandler.h"
+
 
 #ifdef RASPI
 #include "wiringPi.h"

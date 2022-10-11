@@ -1,7 +1,5 @@
 #include "monitoringhandler.h"
-#include "SX126x/radio/radiohandler.h"
 #include "unistd.h"
-#include "timershandler.h"
 #include <thread>
 #include <chrono>
 #include "datahelper.h"

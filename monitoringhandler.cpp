@@ -1,5 +1,6 @@
 #include "monitoringhandler.h"
-#include "SX126x/radio/radiohandler.h"
+//#include "SX126x/radio/radiohandler.h"
+#include "lorahandler.h"
 #ifdef ARDUINO
 #include "spiarduino.h"
 #include "Arduino.h"

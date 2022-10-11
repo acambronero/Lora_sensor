@@ -3,7 +3,6 @@
 #include "SX126x/radio/sx126x/sx126x.h"
 #include "SX126xHardware.h"
 #include <iostream>
-class SX126Handler;
 
 /*!
  * \brief Radio registers definition
