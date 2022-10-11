@@ -28,7 +28,7 @@ typedef struct TimerEvent_s
 	uint32_t ReloadValue = 10000; /**< Timer delay value	*/
 	bool IsRunning;				  /**< Is the timer currently running	*/
 #ifdef ARDUINO
-    void (*callbackArduino)(void);		  /**< Timer IRQ callback function	*/
+    void (*Callback)(void);		  /**< Timer IRQ callback function	*/
 #else
     std::function<void(void)> Callback;   /**< Timer IRQ callback function	*/
 #endif

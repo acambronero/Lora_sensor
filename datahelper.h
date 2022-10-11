@@ -1,6 +1,7 @@
 #ifndef DATAHELPER_H
 #define DATAHELPER_H
 #include <stdint.h>
+#include <iostream>
 
 enum CommandType {
     COMMAND_DEVICE_CONNECTED = 1,
@@ -103,6 +104,6 @@ T Abs(T x){
 uint64_t Timestamp();
 void sleep_milliseconds(double time);
 void sleep_microseconds(double time);
-
+void println(std::string msg);
 
 #endif

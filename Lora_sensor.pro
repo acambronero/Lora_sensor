@@ -19,7 +19,7 @@ unix:LIBS += -pthread
 #LIBS += -L"/usr/lib"
 #LIBS += -lwiringPi
 
-#DEFINES += RASPI
+#DEFINES += ARDUINO
 
 SOURCES += \
         timer.cpp \

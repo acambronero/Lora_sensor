@@ -7,9 +7,12 @@
 #include "spilora.h"
 #endif
 
+
+#include "datahelper.h"
 MonitoringHandler::MonitoringHandler()
 {
     lora = new LoraHandler();
+    println("MonitoringHandler");
 }
 
 bool MonitoringHandler::Initialize()
@@ -28,10 +31,14 @@ bool MonitoringHandler::Initialize()
     SPI_Lora = new SPILora(SPIDEV1);
     spi_config settings = {0, 8, int(10e6), 0};
     SPI_Lora->SetConfig(&settings);
-    SPI_Lora->Begin();
 #endif
+    bool isOk = SPI_Lora->Begin();
+    println("SPI Begin: " + std::to_string(isOk));
+
     lora->SetSpiLora(SPI_Lora);
     lora_setup();
+    println("MonitoringHandler:: Init");
+    return true;
 }
 
 bool MonitoringHandler::IsInitialized()
@@ -41,13 +48,12 @@ bool MonitoringHandler::IsInitialized()
 
 void MonitoringHandler::lora_setup()
 {
-    std::cout << "setup" << std::endl;
-    if ( lora->HardwareInit() < 0) {
-        printf("Something is wrong !!\n");
+    println("setup_lora");
+    if ( lora->HardwareInit() <= 0) {
+        println("Something is wrong !!\n");
     }
 
     lora->Init();
-
 
     lora->SetChannel(RF_FREQUENCY);
 

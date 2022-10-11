@@ -91,13 +91,12 @@ uint32_t LoraHandler::HardwareInit()
     uint16_t readSyncWord = 0;
     sxHandler->ReadRegisters(REG_LR_SYNCWORD, (uint8_t *)&readSyncWord, 2);
 
-    std::cout << "lora_hardware_init -> readSyncWord: " << readSyncWord << std::endl;
+    std::cout << "lora_hardware_init -> readSyncWord: " << std::hex << readSyncWord << std::endl;
 
-    if ((readSyncWord == 0x2414) || (readSyncWord == 0x4434))
-    {
-        return 0;
+    if ((readSyncWord == 0x2414) || (readSyncWord == 0x4434)){
+        return 1;
     }
-    return 1;
+    return 0;
 }
 
 RadioStatus_t LoraHandler::Get_Status()

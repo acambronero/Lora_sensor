@@ -7,6 +7,9 @@
 #include "spibase.h"
 #include "datahelper.h"
 
+class SPIClass;
+class SPISettings;
+
 class SPIArduino : public SPIBase
 {
 public:
@@ -21,6 +24,9 @@ public:
     virtual bool SetSpeed(uint32_t speed);
     virtual bool SetBitsPerWord(uint8_t bits_per_word);
 protected:
+    SPIClass* spiLora = nullptr;
+    SPISettings* spiSettings = nullptr;
+    bool pins_ok = false;
 };
 
 #endif // SPIARDUINO_H

@@ -28,16 +28,14 @@ enum SPI_MODE {
 };
 #endif
 
+
+
 class SPIBase
 {
 protected:
     std::string spi_dev;
     int spi_fd;
     spi_config spi_settings;
-#ifdef ARDUINO
-    SPIClass spiLora;
-    SPISettings spiSettings;
-#endif
     bool spi_open = false;
 
 public:

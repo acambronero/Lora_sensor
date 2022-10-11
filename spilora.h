@@ -4,10 +4,7 @@
 #include <spibase.h>
 #include <fcntl.h>
 #include <unistd.h>
-
-#ifndef ARDUINO
 #include <sys/ioctl.h>
-#endif
 #include <linux/spi/spidev.h>
 #include <iostream>
 #include "string.h"

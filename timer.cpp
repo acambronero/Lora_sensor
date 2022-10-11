@@ -1,11 +1,11 @@
 #include "timer.h"
-#include "timershandler.h"
 #include "datahelper.h"
 
 
 #ifdef ARDUINO
 Ticker timerTickers[10];
 #else
+#include "timershandler.h"
 TimersHandler timerTickers;
 #endif
 
@@ -13,7 +13,7 @@ uint32_t timerTimes[10];
 bool timerInUse[10] = {false, false, false, false, false, false, false, false, false, false};
 
 #ifdef ARDUINO
-void TimerInit(TimerEvent_t *obj, void (*callback)(void));
+void TimerInit(TimerEvent_t *obj, void (*callback)(void))
 #else
 void TimerInit(TimerEvent_t *obj, std::function<void(void)> callback)
 #endif
