@@ -1,11 +1,9 @@
-#include <string>
 #include "lorahandler.h"
-#include "SX126x/radio/sx126x/sx126x.h"
-#include "SX126x/radio/radiohandler.h"
+#include "sx126x.h"
+#include "radiohandler.h"
 #include "SX126xHardware.h"
-#include <iostream>
 
-lorahandler::lorahandler()
+LoraHandler::LoraHandler()
 {
     sxHandler = new SX126Handler();
     radioHandler = new RadioHandler();
@@ -23,54 +21,54 @@ lorahandler::lorahandler()
     lora->Transfer(a, b, 2);
 }*/
 
-void lorahandler::SetSpiLora(SPIBase *lora)
+void LoraHandler::SetSpiLora(SPIBase *lora)
 {
     sxHandler->SetSpiLora(lora);
 }
 
-void lorahandler::Init()
+void LoraHandler::Init()
 {
     radioHandler->Init(sxHandler);
 }
 
-void lorahandler::SetChannel(uint32_t freq)
+void LoraHandler::SetChannel(uint32_t freq)
 {
     radioHandler->SetChannel(freq, sxHandler);
 }
 
-void lorahandler::SetTxConfig(int8_t power, uint32_t bandwidth, uint32_t datarate, uint8_t coderate, uint16_t preambleLen, bool fixLen, bool crcOn, bool iqInverted, uint32_t TxTimeout)
+void LoraHandler::SetTxConfig(int8_t power, uint32_t bandwidth, uint32_t datarate, uint8_t coderate, uint16_t preambleLen, bool fixLen, bool crcOn, bool iqInverted, uint32_t TxTimeout)
 {
     radioHandler->SetTxConfig(power, bandwidth, datarate, coderate, preambleLen, fixLen, crcOn, iqInverted, TxTimeout, sxHandler);
 }
 
-void lorahandler::SetRxConfig(uint32_t bandwidth, uint32_t datarate, uint8_t coderate, uint16_t preambleLen, uint16_t symbTimeout, bool fixLen, uint8_t payloadLen, bool crcOn, bool iqInverted, bool rxContinuous, uint32_t RxTimeout)
+void LoraHandler::SetRxConfig(uint32_t bandwidth, uint32_t datarate, uint8_t coderate, uint16_t preambleLen, uint16_t symbTimeout, bool fixLen, uint8_t payloadLen, bool crcOn, bool iqInverted, bool rxContinuous, uint32_t RxTimeout)
 {
     radioHandler->SetRxConfig(bandwidth, datarate, coderate, preambleLen, symbTimeout, fixLen, payloadLen, crcOn, iqInverted, rxContinuous, RxTimeout, sxHandler);
  }
 
-void lorahandler::SetRx(uint32_t timeout)
+void LoraHandler::SetRx(uint32_t timeout)
 {
     radioHandler->Rx(timeout, sxHandler);
 }
 
-void lorahandler::SetRxBoosted(uint32_t timeout)
+void LoraHandler::SetRxBoosted(uint32_t timeout)
 {
     radioHandler->RxBoosted(timeout, sxHandler);
 }
 
-void lorahandler::Send(uint8_t *buffer, uint8_t size, uint32_t TxTimeout, uint32_t RxTimeout)
+void LoraHandler::Send(uint8_t *buffer, uint8_t size, uint32_t TxTimeout, uint32_t RxTimeout)
 {
     //std::cout << "lorahandler::Send" << std::endl;
 
     radioHandler->Send(buffer, size, TxTimeout, RxTimeout, sxHandler);
 }
 
-void lorahandler::IrqProcess(uint8_t *dataReady)
+void LoraHandler::IrqProcess(uint8_t *dataReady)
 {
     radioHandler->BgIrqProcess(dataReady, sxHandler);
 }
 
-std::array<uint8_t, 255> lorahandler::GetPayloadData(uint16_t size)
+std::array<uint8_t, 255> LoraHandler::GetPayloadData(uint16_t size)
 {
     std::array<uint8_t, 255> data;
     data = radioHandler->GetPayloadData(size);
@@ -84,7 +82,7 @@ std::array<uint8_t, 255> lorahandler::GetPayloadData(uint16_t size)
 
 }
 
-uint32_t lorahandler::HardwareInit()
+uint32_t LoraHandler::HardwareInit()
 {
     sxHandler->DIOInit();
 
@@ -102,7 +100,7 @@ uint32_t lorahandler::HardwareInit()
     return 1;
 }
 
-RadioStatus_t lorahandler::Get_Status()
+RadioStatus_t LoraHandler::Get_Status()
 {
     RadioStatus_t st;
     st = sxDriver->GetStatus(sxHandler);
@@ -110,7 +108,7 @@ RadioStatus_t lorahandler::Get_Status()
     return st;
 }
 
-RadioError_t lorahandler::Get_DeviceErrors()
+RadioError_t LoraHandler::Get_DeviceErrors()
 {
     RadioError_t e;
     e = sxDriver->GetDeviceErrors(sxHandler);

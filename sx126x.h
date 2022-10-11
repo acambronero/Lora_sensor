@@ -2,7 +2,10 @@
 #define __SX126x_H__
 
 #include "stdint.h"
+#include <math.h>
+#include <string.h>
 #include <functional>
+#include <iostream>
 #include "radiodefinitions.h"
 #define SX1261 1
 #define SX1262 2

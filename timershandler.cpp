@@ -1,7 +1,6 @@
 #include "timershandler.h"
 #include "loratimersloop.h"
-#include "SX126x/boards/mcu/timer.h"
-#include <iostream>
+#include "timer.h"
 
 TimersHandler::TimersHandler()
 {

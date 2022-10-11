@@ -1,9 +1,15 @@
-#ifndef SX126XHARDWARE_H
-#define SX126XHARDWARE_H
-#include "stdint.h"
+#ifndef SX126X_HARDWARE_H
+#define SX126X_HARDWARE_H
+
+
+#include <algorithm>
+#include <iostream>
+#include <chrono>
+#include <thread>
+#include <string>
+#include <fstream>
+
 #include "radiodefinitions.h"
-//#include "SX126x/radio/sx126x/sx126x.h"
-//#include "spibase.h"
 
 class SX126xDriver;
 class SPIBase;
@@ -23,9 +29,6 @@ public:
 
     SPIBase* GetSPI();
 
-/*!
- * @brief Initializes the radio I/Os pins interface
- */
     void DIOInit(void);
 
     void ConfigureGPIO();
@@ -34,12 +37,7 @@ public:
 
     void WriteGPIO(uint8_t value);
 
-/*!
- * @brief De-initializes the radio I/Os pins interface.
- *
- * \remark Useful when going in MCU low power modes
- */
-void IoDeInit(void);
+
 
 /*!
  * @brief HW Reset of the radio
@@ -63,6 +61,7 @@ void Wakeup(void);
  * \param   buffer        Buffer to be send to the radio
  * \param   size          Size of the buffer to send
  */
+
 void WriteCommand(RadioCommands_t opcode, uint8_t *buffer, uint16_t size);
 
 /*!
@@ -134,13 +133,6 @@ void ReadBuffer(uint8_t offset, uint8_t* &buffer, uint8_t size);
  */
 void SetRfTxPower(int8_t power);
 
-/*!
- * @brief Gets the board PA selection configuration
- *
- * \param  channel Channel frequency in Hz
- * \retval PaSelect RegPaConfig PaSelect value
- */
-uint8_t GetPaSelect(uint32_t channel);
 
 /*!
  * @brief Gets info on the number of packets received
@@ -160,5 +152,4 @@ protected:
 
 
 };
-
-#endif // SX126XHARDWARE_H
+#endif // SX126X_HARDWARE_H

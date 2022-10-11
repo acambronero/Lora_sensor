@@ -3,6 +3,7 @@
 
 #include "stdint.h"
 #include "stdbool.h"
+#include <iostream>
 #ifdef ARDUINO
 #include "Ticker.h"
 #endif

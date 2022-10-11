@@ -1,11 +1,12 @@
+#include "radiohandler.h"
+#include "sx126x.h"
 #include "SX126xHardware.h"
-#include "SX126x/boards/mcu/timer.h"
-#include "SX126x/radio/radiohandler.h"
-#include "SX126x/radio/sx126x/sx126x.h"
-//#include "itools.h"
+
+
 #ifdef RASPI
 #include "wiringPi.h"
 #endif
+
 #include <math.h>
 #include <string.h>
 #include <unistd.h>

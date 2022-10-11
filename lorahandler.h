@@ -1,13 +1,11 @@
 #ifndef LORAHANDLER_H
 #define LORAHANDLER_H
 
-//#include "SX126x/radio/sx126x/sx126x.h"
+#include <iostream>
+#include <string>
 #include "datahelper.h"
 #include "radiodefinitions.h"
 #include <array>
-//#include "SX126xHardware.h"
-//#include "spibase.h"
-
 
 #define BUFFER_SIZE 64
 
@@ -16,11 +14,10 @@ class SX126Handler;
 class SX126xDriver;
 class SPIBase;
 
-
-class lorahandler
+class LoraHandler
 {
 public:
-    lorahandler();
+    LoraHandler();
 
     //void TestSpi(SPILora* lora);
     void SetSpiLora(SPIBase* lora);

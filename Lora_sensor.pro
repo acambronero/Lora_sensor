@@ -21,15 +21,10 @@ unix:LIBS += -pthread
 
 #DEFINES += RASPI
 
-INCLUDEPATH += \
-        $$PWD/SX126x \
-        $$PWD/SX126x/boards \
-        $$PWD/SX126x/radio \
-
 SOURCES += \
-        SX126x/boards/mcu/espressif/timer.cpp \
-        SX126x/radio/sx126x/radiohandler.cpp \
-        SX126x/radio/sx126x/sx126x.cpp \
+        timer.cpp \
+        radiohandler.cpp \
+        sx126x.cpp \
         SX126xHardware.cpp \
         datahelper.cpp \
         lorahandler.cpp \
@@ -47,9 +42,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    SX126x/boards/mcu/timer.h \
-    SX126x/radio/radiohandler.h \
-    SX126x/radio/sx126x/sx126x.h \
+    timer.h \
+    radiohandler.h \
+    sx126x.h \
     SX126xHardware.h \
     datahelper.h \
     loop.h \

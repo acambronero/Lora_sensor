@@ -1,9 +1,6 @@
 #ifndef MONITORINGHANDLER_H
 #define MONITORINGHANDLER_H
 
-//#include "spibase.h"
-//#include "lorahandler.h"
-//#include "itools.h"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -23,8 +20,7 @@
 
 #define BUFFER_SIZE 127 // Define the payload size here
 
-//class RadioHandler;
-class lorahandler;
+class LoraHandler;
 class SPIBase;
 
 class MonitoringHandler
@@ -41,7 +37,7 @@ public:
     void CheckSerialData();
     void SetRx(uint32_t timeout);
 
-    lorahandler *lora = nullptr;
+    LoraHandler *lora = nullptr;
     bool firstTime = true;
     uint8_t dataReady = 0;
     uint8_t sendReady = 0;

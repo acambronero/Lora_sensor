@@ -1,5 +1,4 @@
 #include "monitoringhandler.h"
-//#include "SX126x/radio/radiohandler.h"
 #include "lorahandler.h"
 #ifdef ARDUINO
 #include "spiarduino.h"
@@ -10,7 +9,7 @@
 
 MonitoringHandler::MonitoringHandler()
 {
-    lora = new lorahandler();
+    lora = new LoraHandler();
 }
 
 bool MonitoringHandler::Initialize()
@@ -124,11 +123,10 @@ void MonitoringHandler::Run()
 std::array<uint8_t, 255> MonitoringHandler::GetPayloadData(uint16_t size)
 {
 
-    //std::array<uint8_t, 255> data;
-
+    std::array<uint8_t, 255> data;
     //std::copy(std::begin(payload), std::end(payload), std::begin(data));
-
-    lora->GetPayloadData(size);
+    data = lora->GetPayloadData(size);
+    return data;
 }
 
 void MonitoringHandler::CheckSerialData()

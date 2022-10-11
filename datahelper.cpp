@@ -57,10 +57,20 @@ uint64_t Timestamp(){
 
 #ifndef ARDUINO
 void sleep_milliseconds(double time){
-    std::this_thread::sleep_for( std::chrono::milliseconds((long long)time));
+    #ifndef ARDUINO
+        std::this_thread::sleep_for( std::chrono::milliseconds((long long)time));
+#else
+    delay(time);
+
+#endif
 }
 
 void sleep_microseconds(double time){
+#ifndef ARDUINO
     std::this_thread::sleep_for (std::chrono::microseconds((long long)time));
+#else
+    delayMicroseconds(time);
+
+#endif
 }
 #endif

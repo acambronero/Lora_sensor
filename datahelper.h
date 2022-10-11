@@ -101,9 +101,8 @@ T Abs(T x){
 }
 
 uint64_t Timestamp();
-#ifndef ARDUINO
 void sleep_milliseconds(double time);
 void sleep_microseconds(double time);
-#endif
+
 
 #endif

@@ -1,11 +1,12 @@
 #ifndef __RADIOHANDLER_H__
 #define __RADIOHANDLER_H__
 
-#include "stdint.h"
-#include "SX126x/boards/mcu/timer.h"
 #include <vector>
+#include "stdint.h"
+
 #include "radiodefinitions.h"
 #include "datahelper.h"
+#include "timer.h"
 
 #define BUFFER_SIZE 64
 
@@ -45,7 +46,7 @@ public:
     void SetMaxPayloadLength(uint8_t max, SX126Handler *sxHandler);
     void SetPublicNetwork(bool enable, SX126Handler *sxHandler);
     uint32_t GetWakeupTime();
-#if ARDUINO
+#ifdef ARDUINO
     static void OnTxTimeoutIrq();
     static void OnRxTimeoutIrq();
 #else

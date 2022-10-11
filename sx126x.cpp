@@ -1,8 +1,5 @@
-#include <math.h>
-#include <string.h>
-#include "SX126x/radio/sx126x/sx126x.h"
+#include "sx126x.h"
 #include "SX126xHardware.h"
-#include <iostream>
 
 /*!
  * \brief Radio registers definition
