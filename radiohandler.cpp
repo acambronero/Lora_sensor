@@ -301,7 +301,7 @@ void RadioHandler::SetRxConfig (uint32_t bandwidth, uint32_t datarate, uint8_t c
     // Timeout Max, Timeout handled directly in SetRx function
     //RxTimeout = 0xFA0;
     this->RxTimeout = RxTimeout;
-    Rx(0, sxHandler);
+    //Rx(0, sxHandler);
     //std::cout << "timeout:RadioHandler::Rxconfig: " << RxTimeout << std::endl;
 
 }
@@ -510,7 +510,7 @@ void RadioHandler::Rx(uint32_t timeout, SX126Handler *sxHandler)
 	if (RxContinuous == true)
 	{
         std::cout << "RadioHandler::RxContinous" << std::endl;
-        sxDriver->SetDioIrqParams(IRQ_RX_DONE, IRQ_RX_DONE, IRQ_RADIO_NONE, IRQ_RADIO_NONE, sxHandler);
+        //sxDriver->SetDioIrqParams(IRQ_RX_DONE, IRQ_RX_DONE, IRQ_RADIO_NONE, IRQ_RADIO_NONE, sxHandler);
 		// Even Continous mode is selected, put a timeout here
 		if (timeout != 0)
 		{
@@ -937,9 +937,9 @@ void RadioHandler::OnTxDone()
 void RadioHandler::OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
 {
     std::cout << "RadioHandler::OnRxDone" << std::endl;
-    sxDriver->ClearIrqStatus(IRQ_RADIO_ALL, sxHandler);
+    //sxDriver->ClearIrqStatus(IRQ_RADIO_ALL, sxHandler);
     //sxDriver->SetDioIrqParams(IRQ_PREAMBLE_DETECTED, IRQ_PREAMBLE_DETECTED, IRQ_RADIO_NONE, IRQ_RADIO_NONE, sxHandler);
-    Rx(0, sxHandler);
+    //Rx(0, sxHandler);
 
     /* Switch case depends on the payload receive
      *

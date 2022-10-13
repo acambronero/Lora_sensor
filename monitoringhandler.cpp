@@ -57,9 +57,9 @@ void MonitoringHandler::lora_setup()
     lora->SetRxConfig(LORA_BANDWIDTH, LORA_SPREADING_FACTOR,
                       LORA_CODINGRATE, LORA_PREAMBLE_LENGTH,
                       LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
-                      0, true, LORA_IQ_INVERSION_ON, true, RX_TIMEOUT_VALUE);
+                      0, true, LORA_IQ_INVERSION_ON, false, RX_TIMEOUT_VALUE);
 
-    //sendReady = 1;
+    sendReady = 1;
 
 }
 

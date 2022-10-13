@@ -4,14 +4,15 @@
 
 #ifdef RASPI
 #include "wiringPi.h"
+#define BUSY 24
+#define DIO1 25
+#define RESET 22
 #endif
 #ifdef ARDUINO
 #include <SPI.h>
 #endif
 
-#define BUSY 24
-#define DIO1 25
-#define RESET 22
+
 
 
 SX126Handler::SX126Handler()
@@ -76,7 +77,8 @@ void SX126Handler::WriteGPIO(uint8_t value)
 void SX126Handler::Reset(void)
 {
 #if defined(RASPI)
-    //TODO
+    digitalWrite(RESET, LOW);
+    digitalWrite(RESET, HIGH);
 #elif defined(ARDUINO)
     digitalWrite(spiLora->config_hw.PIN_LORA_RESET, LOW);
     digitalWrite(spiLora->config_hw.PIN_LORA_RESET, HIGH);
