@@ -1,3 +1,4 @@
+#define RASPI
 #include "monitoringhandler.h"
 #include "unistd.h"
 #include <thread>
@@ -38,11 +39,11 @@ int main(){
             if (monitoring.loraDataReady) {
                 //data = monitoring.lora->radioHandler->GetPayloadData(size);
                 data = monitoring.GetPayloadData(size);
-                /*std::cout << "Data Received: " << std::endl;
+                std::cout << "Data Received: " << std::endl;
                 std::cout << data[0] << std::endl;
                 std::cout << data[1] << std::endl;
                 std::cout << data[2] << std::endl;
-                std::cout << data[3] << std::endl;*/
+                std::cout << data[3] << std::endl;
 
                 monitoring.loraDataReady = 0;
                 monitoring.sendReady = 1;

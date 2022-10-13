@@ -13,7 +13,7 @@ LIB =
 LDFLAGS = 
 
 
-INC_RELEASE = $(INC) -ISX126x -ISX126x/radio -ISX126x/radio/sx126x -ISX126x/boards -ISX126x/boards/mcu -ISX126x/boards/mcu/espressif -I.
+INC_RELEASE = $(INC) -I.
 CFLAGS_RELEASE = $(CFLAGS) -Wall -O0 -g3 -c -fPIC -std=c++11 -DHAVE_PTHREAD -pthread -DZMQ_USE_EPOLL 
 RESINC_RELEASE = $(RESINC)
 RCFLAGS_RELEASE = $(RCFLAGS)
@@ -36,9 +36,9 @@ $(OBJDIR_RELEASE)/spilora.o \
 $(OBJDIR_RELEASE)/SX126xHardware.o \
 $(OBJDIR_RELEASE)/timershandler.o \
 $(OBJDIR_RELEASE)/main.o \
-$(OBJDIR_RELEASE)/SX126x/radio/radiohandler.o \
-$(OBJDIR_RELEASE)/SX126x/radio/sx126x.o \
-$(OBJDIR_RELEASE)/SX126x/boards/timer.o 
+$(OBJDIR_RELEASE)/radiohandler.o \
+$(OBJDIR_RELEASE)/sx126x.o \
+$(OBJDIR_RELEASE)/timer.o 
 
 
 all: release
@@ -48,9 +48,6 @@ clean: clean_release clean_objets
 before_release:
 		test -d bin/Release || mkdir -p bin/Release
 		test -d $(OBJDIR_RELEASE) || mkdir -p $(OBJDIR_RELEASE)
-		test -d $(OBJDIR_RELEASE)/SX126x || mkdir -p $(OBJDIR_RELEASE)/SX126x
-		test -d $(OBJDIR_RELEASE)/SX126x/radio || mkdir -p $(OBJDIR_RELEASE)/SX126x/radio
-		test -d $(OBJDIR_RELEASE)/SX126x/boards || mkdir -p $(OBJDIR_RELEASE)/SX126x/boards
 		test -d $(OBJDIR_RELEASE)/Lora_sensor || mkdir -p $(OBJDIR_RELEASE)/Lora_sensor
 
 
@@ -64,10 +61,10 @@ out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE)
 $(OBJDIR_RELEASE)/datahelper.o: datahelper.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c datahelper.cpp -o $(OBJDIR_RELEASE)/datahelper.o
 
-$(OBJDIR_RELEASE)/SX126x/boards/timer.o: SX126x/boards/mcu/espressif/timer.cpp SX126x/boards/mcu/timer.h
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c SX126x/boards/mcu/espressif/timer.cpp -o $(OBJDIR_RELEASE)/SX126x/boards/timer.o
+$(OBJDIR_RELEASE)/timer.o: timer.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c timer.cpp -o $(OBJDIR_RELEASE)/timer.o
 
-$(OBJDIR_RELEASE)/lorahandler.o: lorahandler.cpp SX126x/boards/mcu/timer.h
+$(OBJDIR_RELEASE)/lorahandler.o: lorahandler.cpp radiodefinitions.h
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c lorahandler.cpp -o $(OBJDIR_RELEASE)/lorahandler.o
 
 $(OBJDIR_RELEASE)/loratimersloop.o: loratimersloop.cpp
@@ -81,8 +78,11 @@ $(OBJDIR_RELEASE)/spibase.o: spibase.cpp
 
 $(OBJDIR_RELEASE)/spilora.o: spilora.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c spilora.cpp -o $(OBJDIR_RELEASE)/spilora.o
+	
+$(OBJDIR_RELEASE)/spiarduino.o: spiarduino.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c spiarduino.cpp -o $(OBJDIR_RELEASE)/spiarduino.o
 
-$(OBJDIR_RELEASE)/SX126xHardware.o: SX126xHardware.cpp
+$(OBJDIR_RELEASE)/SX126xHardware.o: SX126xHardware.cpp radiodefinitions.h
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c SX126xHardware.cpp -o $(OBJDIR_RELEASE)/SX126xHardware.o
 
 $(OBJDIR_RELEASE)/timershandler.o: timershandler.cpp
@@ -91,11 +91,11 @@ $(OBJDIR_RELEASE)/timershandler.o: timershandler.cpp
 $(OBJDIR_RELEASE)/main.o: main.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c main.cpp -o $(OBJDIR_RELEASE)/main.o
 
-$(OBJDIR_RELEASE)/SX126x/radio/radiohandler.o: SX126x/radio/sx126x/radiohandler.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c SX126x/radio/sx126x/radiohandler.cpp -o $(OBJDIR_RELEASE)/SX126x/radio/radiohandler.o
+$(OBJDIR_RELEASE)/radiohandler.o: radiohandler.cpp radiodefinitions.h
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c radiohandler.cpp -o $(OBJDIR_RELEASE)/radiohandler.o
 
-$(OBJDIR_RELEASE)/SX126x/radio/sx126x.o: SX126x/radio/sx126x/sx126x.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c SX126x/radio/sx126x/sx126x.cpp -o $(OBJDIR_RELEASE)/SX126x/radio/sx126x.o
+$(OBJDIR_RELEASE)/sx126x.o: sx126x.cpp radiodefinitions.h
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c sx126x.cpp -o $(OBJDIR_RELEASE)/sx126x.o
 
 clean_release:
 	rm -f $(OBJ_RELEASE) $(OUT_RELEASE)
