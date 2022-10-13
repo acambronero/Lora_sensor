@@ -134,7 +134,7 @@ void MonitoringHandler::CheckSerialData()
     if (!Serial.available()) return;
     if (!Serial.readBytesUntil('\r', rxSerialBuffer, BUFFER_SIZE)) return;
 
-    txLoraBuffer = rxSerialBuffer;
+    std::copy(std::begin(rxSerialBuffer), std::end(rxSerialBuffer), std::begin(txLoraBuffer));
 
     serialDataReady = 1;
 #endif

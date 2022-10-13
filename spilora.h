@@ -2,6 +2,7 @@
 #define SPILORA_H
 
 #include <spibase.h>
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -10,6 +11,7 @@
 #include "string.h"
 #include "linux/types.h"
 #include "errno.h"
+
 
 
 #define DELAY_TX   50
