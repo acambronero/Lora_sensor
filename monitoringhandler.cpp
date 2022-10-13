@@ -123,6 +123,8 @@ std::array<uint8_t, 255> MonitoringHandler::GetPayloadData(uint16_t size)
 {
     std::array<uint8_t, 255> data;
     data = lora->GetPayloadData(size);
+    std::copy(std::begin(data), std::end(data), std::begin(txSerialBuffer));
+
     return data;
 }
 
@@ -132,11 +134,10 @@ void MonitoringHandler::CheckSerialData()
     if (!Serial.available()) return;
     if (!Serial.readBytesUntil('\r', rxSerialBuffer, BUFFER_SIZE)) return;
 
+    txLoraBuffer = rxSerialBuffer;
+
     serialDataReady = 1;
-
-    //lora.Send(lora.TxdBuffer, lora.BufferSize);
 #endif
-
 }
 
 void MonitoringHandler::SetRx(uint32_t timeout){

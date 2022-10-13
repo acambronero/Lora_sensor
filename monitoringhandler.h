@@ -42,6 +42,11 @@ public:
     uint8_t loraDataReady = 0;
     uint8_t serialDataReady = 0;
     uint8_t sendReady = 0;
+    uint8_t txSerialBuffer[255];
+    uint8_t rxSerialBuffer[BUFFER_SIZE];
+    uint8_t txLoraBuffer[BUFFER_SIZE];
+    uint8_t rxLoraBuffer[BUFFER_SIZE];
+
     uint32_t TxTimeout = TX_TIMEOUT_VALUE;
     uint32_t RxTimeout = RX_TIMEOUT_VALUE;
 
@@ -49,10 +54,6 @@ protected:
 
     SPIBase *SPI_Lora = nullptr;
     uint16_t BufferSize;
-    uint8_t rxSerialBuffer[BUFFER_SIZE];
-    uint8_t rxLoraBuffer[BUFFER_SIZE];
-    uint8_t txSerialBuffer[BUFFER_SIZE];
-    uint8_t txLoraBuffer[BUFFER_SIZE];
 
     uint8_t message_type = 0;
     uint8_t command = 0;
