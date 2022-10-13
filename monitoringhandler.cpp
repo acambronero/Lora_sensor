@@ -74,8 +74,8 @@ void MonitoringHandler::decode_message()
 {
     int index = 0;
     std::string SFD;
-    SFD.push_back((char)empty_buffer(RcvBuffer, 1, index));
-    SFD.push_back((char)empty_buffer(RcvBuffer, 1, index));
+    SFD.push_back((char)empty_buffer(rxLoraBuffer, 1, index));
+    SFD.push_back((char)empty_buffer(rxLoraBuffer, 1, index));
 
     if (SFD != "FS") return;
 
@@ -105,7 +105,7 @@ void MonitoringHandler::decode_message()
                 0x260B269EDE32ABCE,
                 0x1,
             };
-            set_buffer_data(TxdBuffer, &msg);
+            set_buffer_data(txLoraBuffer, &msg);
             break;
         }
         default:
@@ -116,7 +116,7 @@ void MonitoringHandler::decode_message()
 
 void MonitoringHandler::Run()
 {
-    lora->IrqProcess(&dataReady);
+    lora->IrqProcess(&loraDataReady);
 }
 
 std::array<uint8_t, 255> MonitoringHandler::GetPayloadData(uint16_t size)
@@ -130,9 +130,10 @@ void MonitoringHandler::CheckSerialData()
 {
 #ifdef ARDUINO
     if (!Serial.available()) return;
-    if (!Serial.readBytesUntil('\r', RcvSerialBuffer, BUFFER_SIZE)) return;
+    if (!Serial.readBytesUntil('\r', rxSerialBuffer, BUFFER_SIZE)) return;
 
-    //lora.prepare_message();
+    serialDataReady = 1;
+
     //lora.Send(lora.TxdBuffer, lora.BufferSize);
 #endif
 
